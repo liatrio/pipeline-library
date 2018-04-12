@@ -1,4 +1,4 @@
-Pipeline Library
+# Pipeline Library
 
 Meant to be used as a pipeline library for jenkins pipelines.
 
