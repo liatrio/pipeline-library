@@ -1,0 +1,91 @@
+/**
+ * A pipeline to demo running parallel branches using both a dynamic and static coding method.
+ *
+ * In the Blue Ocean GUI, a dynamic construction might be better so as not to show parallel
+ * branches that are skipped in the graphic representation of a run.
+ */
+
+/**
+ * A map of parallel runs built dynamically in the job. It is a map of closures
+ */
+def parallelCodeMap = [:]
+
+/**
+ * Declarative pipeline
+ */
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Setup') {
+
+            steps {
+
+                // Set up the dynamic parallel code map
+                script {
+
+                    parallelCodeMap['foo'] = {
+                        echo "Running foo branch.."
+                    }
+
+                    parallelCodeMap['bar'] = {
+                        echo "Running bar branch..."
+                    }
+                }
+            }
+        }
+
+        stage('Dynamic') {
+            steps {
+                script {
+                    parallel( parallelCodeMap )
+                }
+            }
+        }
+
+        // Pre pipeline v1.2 do it this way, awkward syntax
+        stage('Static Old Way') {
+            steps {
+                parallel (
+                    'branch_1' : {
+                        echo "Running static branch 1"
+                    },
+                    'branch_2' : {
+                        echo "Running static branch 2"
+                    },
+                )
+            }
+        }
+
+        // From pipeline v1.2 do it this way : requires Pipeline Model Definition Plugin v1.2+
+        stage('Static New Way') {
+
+            // Support for full parallel stages. Nice.
+            parallel {
+
+                stage('Stage 1') {
+                    steps {
+                        echo "Running pipeline v1.2 static stage 1"
+                    }
+                }
+
+                stage('Stage 2') {
+                    steps {
+                        echo "Running pipeline v1.2 static stage 2"
+                    }
+                }
+
+                stage('Stage Skipped') {
+
+                    when { expression { false } }
+
+                    steps {
+                        echo "pipeline v1.2 static stage will be skipped"
+                    }
+                }
+            }
+        }
+    }
+}
