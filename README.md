@@ -1,5 +1,6 @@
 # Pipeline Library
-
+[![Build Status](https://travis-ci.org/liatrio/pipeline-library)](https://travis-ci.org/liatrio/pipeline-library)
+https://travis-ci.org/liatrio/pipeline-library#
 Meant to be used as a pipeline library for jenkins pipelines.
 
 #### Run Pipeline Library Tests Locally For Development Purposes
