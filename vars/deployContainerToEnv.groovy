@@ -2,7 +2,7 @@ def call(Map params) {
     withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
         withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
             STAGE = env.STAGE_NAME
-            sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${params.env} docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${env.ARTIFACTORY_URL}:8081"
+            sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${params.env} docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${env.ARTIFACTORY_URL}"
         }
         String stopAppCommand = "docker rm -f ${params.appName} || sleep 5"
         sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${params.env} docker pull ${env.DOCKER_REPO}/${params.imageName}:${params.imageVersion}"
