@@ -1,5 +1,6 @@
 #!/bin/env groovy
 def call() {
+    sh "env"
     hipchatSend color: 'GRAY', notify: true, v2enabled: true, message: "Building ${env.GIT_BRANCH} from: <a href=${env.GIT_URL - ".git"}/commits/${env.GIT_COMMIT}>${env.GIT_URL}</a>"
     withCredentials([usernamePassword(credentialsId: 'Artifactory', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
         sh "mvn clean deploy -B -DartifactoryUsername=$USERNAME -DartifactoryPassword=$PASSWORD"
