@@ -21,17 +21,12 @@ class runAppLocallyTestSpec extends PipelineSpockTestBase {
         script.call(appParams)
 
         then:
-        assert helper.callStack.findAll { call ->
-            call.methodName == "sh"
-        }.any {
-            it.toString().contains("docker rm -f ${appParams.appName} || sleep 5")
-        }
-        assert helper.callStack.findAll { call ->
-            call.methodName == "sh"
-        }.any {
-            it.toString().contains("docker run -d --net demo -p 80:8080 --rm --name ${appParams.appName} docker-repo-path.io/${appParams.imageName}:${appParams.imageVersion}")
-        }
         printCallStack()
+        assert helper.callStack.get(0).toString().trim() == "runAppLocally.call({appName=some-app-name, imageName=some-image-name, imageVersion=latest})"
+        assert helper.callStack.get(1).toString().trim() == "runAppLocally.sh(docker network create demo || true)"
+        assert helper.callStack.get(2).toString().trim() == "runAppLocally.sh(docker rm -f some-app-name || true)"
+        assert helper.callStack.get(3).toString().trim() == "runAppLocally.retry(3, groovy.lang.Closure)"
+        assert helper.callStack.get(4).toString().trim() == "runAppLocally.sh(docker run -d --net demo -p 80:8080 --rm --name some-app-name docker-repo-path.io/some-image-name:latest)"
         assertJobStatusSuccess()
     }
 }
