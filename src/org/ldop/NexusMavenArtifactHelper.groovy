@@ -11,15 +11,23 @@ class NexusMavenArtifactHelper {
 
     public NexusMavenArtifactHelper() { /* empty */ }
 
-    // Downloads an artifact from nexus and writes it to targetPath.
-    // Creates target directories if they don't exist
-    // Errors if the target file already exists
-    static def getArtifact(groupId, artifactId, version, targetPath) {
+    /*
+     * Downloads an artifact from nexus and writes it to targetPath.
+     * Creates target directories if they don't exist
+     * Errors if the target file already exists
+     *
+     * @param groupId       Artifact group ID
+     * @param artifactId    Artifact ID
+     * @param version       Artifact version
+     * @param targetPath    Local path for the artifact
+     * @param nexus         FQDN + port for nexus
+     */
+    static def getArtifact(groupId, artifactId, version, targetPath, String nexus="http://nexus:8081") {
 
         if (version.contains('SNAPSHOT')) {
-            url = "http://nexus:8081/nexus/service/local/artifact/maven/content?r=snapshots&g=${groupId}&a=${artifactId}&v=${version}&p=war"
+            url = "${nexus}/nexus/service/local/artifact/maven/content?r=snapshots&g=${groupId}&a=${artifactId}&v=${version}&p=war"
         } else {
-            url = "http://nexus:8081/nexus/service/local/artifact/maven/content?r=releases&g=${groupId}&a=${artifactId}&v=${version}&p=war"
+            url = "${nexus}/nexus/service/local/artifact/maven/content?r=releases&g=${groupId}&a=${artifactId}&v=${version}&p=war"
         }
 
         env = System.getenv()
