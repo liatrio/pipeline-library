@@ -1,10 +1,16 @@
 #!/bin/env groovy
 
-def call (String input_version) {
+/*
+ * Increases the project version by one
+ *
+ * @param input_version     Existing version
+ * @param type              Version increase type (major/minor/patch)
+ */
+
+def call (String input_version, String type = "patch") {
 
     def version = input_version.tokenize(".")
 
-    def type = "patch"
     def snapshot = version[2].contains("-SNAPSHOT")
 
     def major
@@ -15,7 +21,7 @@ def call (String input_version) {
     if (type == "major") {
     	major = version[0].toInteger() + 1
     	minor = "0"
-    	patch	= "0"
+    	patch = "0"
     }
     //minor update
     else if (type == "minor") {

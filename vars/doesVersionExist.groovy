@@ -2,6 +2,14 @@
 
 import org.ldop.DockerHubHelper
 
+/*
+ * Checks if a given version of an artifact exists
+ *
+ * @param repository    Repository to check in
+ * @param image         Image to check the version of
+ * @param tagName       Tag to check for
+ */
+
 def call(repository, image, tagName) {
   DockerHubHelper helper = new DockerHubHelper()
 

@@ -1,3 +1,12 @@
+#!/bin/env groovy
+
+/*
+ * Deploys a given container to a given environment
+ *
+ * @param params    Map of parameters, including environment, image name, image version
+ */
+
+
 def call(Map params) {
     withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
         withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
