@@ -1,4 +1,9 @@
-#!/bin/env groovy
+#!/usr/bin/env groovy
+
+/*
+ * Runs a maven build for the project
+ */
+
 def call() {
     hipchatSend color: 'GRAY', notify: true, v2enabled: true, message: "Building ${env.GIT_BRANCH} from: <a href=${env.GIT_URL - ".git"}/commits/${env.GIT_COMMIT}>${env.GIT_URL}</a>"
     configFileProvider([configFile(fileId: 'artifactory', variable: 'MAVEN_SETTINGS')]) {

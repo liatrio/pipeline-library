@@ -1,3 +1,11 @@
+#!/usr/bin/env groovy
+
+/*
+ * Runs a docker image
+ *
+ * @param params    Map of parameters
+ */
+
 def call(Map params) {
     STAGE = env.STAGE_NAME
     sh "docker network create demo || true"
