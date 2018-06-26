@@ -1,11 +1,5 @@
 #!/bin/env groovy
 
-/*
- * Posts a message to a chat room
- *
- * @param params    Map of parameters
- */
-
 def call(Map params) {
     def color = params.color
     def message = params.message

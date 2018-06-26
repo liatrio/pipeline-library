@@ -1,0 +1,7 @@
+##### Replaces tag name in docker compose file with branch name
+Param Name | Description
+--- | ---
+ldopImageName | Image name to search for
+branch | Branch name
+directory | Directory to find docker compose file in
+orgName | Organizational name for docker image

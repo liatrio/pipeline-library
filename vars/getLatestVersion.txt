@@ -1,0 +1,5 @@
+##### Gets the latest version of an image from a repository
+Param Name | Description
+--- | ---
+repository | Repository to check in
+image | Image to get the latest version of

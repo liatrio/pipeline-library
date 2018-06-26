@@ -1,0 +1,5 @@
+##### Increases the project version by one
+Param Name | Description
+--- | ---
+input_version | Existing version
+param type | Version increase type (major/minor/patch)

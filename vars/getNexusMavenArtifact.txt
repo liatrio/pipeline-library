@@ -1,0 +1,9 @@
+##### Downloads an artifact from nexus and writes it to targetPath
+Creates target directories if they don't exist. Errors if the target file already exists
+
+Param Name | Description
+--- | ---
+groupId | Artifact group ID
+artifactId | Artifact ID
+version | Artifact version
+targetPath | Local path for the artifact

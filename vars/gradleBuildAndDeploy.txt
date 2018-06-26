@@ -1,0 +1,2 @@
+##### Runs a gradle build for the project and publishes the artifact to Artifactory
+No Parameters

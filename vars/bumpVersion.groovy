@@ -1,12 +1,5 @@
 #!/bin/env groovy
 
-/*
- * Increases the project version by one
- *
- * @param input_version     Existing version
- * @param type              Version increase type (major/minor/patch)
- */
-
 def call (String input_version, String type = "patch") {
 
     def version = input_version.tokenize(".")

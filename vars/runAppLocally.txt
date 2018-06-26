@@ -1,0 +1,4 @@
+##### Runs a docker image locally
+Param Name | Description
+--- | ---
+params | Map of parameters

@@ -1,0 +1,6 @@
+##### Deploys to a bluemix environment
+Param Name | Description
+--- | ---
+productName | Name of the product to deploy
+artifactPath | Path to artifact to deploy
+nexus | FQDN + port for nexus

@@ -1,0 +1,4 @@
+##### Posts a message to a chat room
+Param Name | Description
+--- | ---
+params | Map of parameters

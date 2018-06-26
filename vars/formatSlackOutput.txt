@@ -1,0 +1,7 @@
+##### Formatter for details for outputting to Slack
+Param Name | Description
+--- | ---
+jobTitle | Job title
+jobUrl | Job URL
+jobChanges | List of changes in the job
+exitStatus | Job exit status

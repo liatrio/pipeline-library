@@ -1,0 +1,8 @@
+##### Gets an artifact based on parameters
+Param Name | Description
+--- | ---
+groupId | Artifact group ID
+artifactId | Artifact ID
+version | Artifact version
+artifactName | Name for the local artifact
+nexus | Nexus FQDN

@@ -1,0 +1,4 @@
+##### Pushes a docker image to artifactory
+Param Name | Description
+--- | ---
+tag | Image tag to push

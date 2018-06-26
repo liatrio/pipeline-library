@@ -1,11 +1,5 @@
 #!/usr/bin/env groovy
 
-/*
- * Adds the product version to the JSON manifest
- *
- * @param product   Product name
- * @param version   Product version
- */
 def call(product, version) {
 
     if (!product || !version)

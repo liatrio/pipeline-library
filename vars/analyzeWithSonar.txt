@@ -1,0 +1,2 @@
+##### Analyzes the project with Sonar
+No Parameters

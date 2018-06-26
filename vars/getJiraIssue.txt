@@ -1,0 +1,2 @@
+##### Gets a Jira issue
+No Parameters

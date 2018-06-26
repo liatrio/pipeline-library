@@ -1,0 +1,11 @@
+##### Deploys an application container to an environment.
+Param Name | Description
+--- | ---
+user | User to connect to instance as.
+instance | FQDN of instance to deploy to.
+credentialsId | Id of private key credentials file used to connect to instance.
+image | Name of image to deploy.
+tag | Tag of image to deploy.
+appName | Unique identifier for application container
+frontendRule | URL to proxy application on.
+loadBalanceGroup | Backend group to place application in (optional)

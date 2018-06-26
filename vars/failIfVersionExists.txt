@@ -1,0 +1,6 @@
+##### Helper to fail the pipeline if image already exists
+Param Name | Description
+--- | ---
+repository | Repository to check in
+image | Image to check the version of
+tagName | Tag to check for

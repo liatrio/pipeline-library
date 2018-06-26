@@ -1,9 +1,5 @@
 #!/usr/bin/env groovy
 
-/*
- * Gets a Jira issue
- */
-
 def call() {
     def jiraIssue = ''
     def gitLog = sh(

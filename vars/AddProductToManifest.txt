@@ -1,0 +1,5 @@
+##### Adds the product version to the JSON manifest
+Param Name | Description
+--- | ---
+product | Product name
+version | Product version

@@ -1,8 +1,4 @@
-#!/usr/bin/env groovy
-
-/*
- * Runs a gradle build for the project and publishes the artifact to Artifactory
- */
+#!/usr/bin/env groovy\
 
 def call() {
 hipchatSend color: 'GRAY', notify: true, v2enabled: true, message: "Building ${env.GIT_BRANCH} from: <a href=${env.GIT_URL - ".git"}/commits/${env.GIT_COMMIT}>${env.GIT_URL}</a>"

@@ -1,0 +1,6 @@
+##### Checks if a given version of an artifact exists
+Param Name | Description
+--- | ---
+repository | Repository to check in
+image | Image to check the version of
+tagName | Tag to check for

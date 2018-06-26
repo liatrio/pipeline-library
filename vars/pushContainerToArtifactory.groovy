@@ -1,11 +1,5 @@
 #!/usr/bin/env groovy
 
-/*
- * Pushes a docker image to artifactory
- *
- * @param tag   Image tag to push
- */
-
 def call(tag) {
     STAGE = env.STAGE_NAME
     withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {

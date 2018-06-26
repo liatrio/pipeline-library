@@ -1,15 +1,5 @@
 #!/usr/bin/env groovy
 
-/*
- * Gets an artifact based on parameters
- *
- * @param groupId		Artifact group ID
- * @param artifactId	Artifact ID
- * @param version		Artifact version
- * @param artifactName	Name for the local artifact
- * @param nexus			Nexus FQDN
- */
-
 def call(String groupId, String artifactId, String version, String artifactName, String nexus="http://nexus:8081"){
 
 	if (version.contains("SNAPSHOT")){

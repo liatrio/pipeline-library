@@ -1,9 +1,5 @@
 #!/usr/bin/env groovy
 
-/*
- * Analyzes the project with Sonar
- */
-
 def call() {
     withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarqubeToken')]) {
         sh "mvn sonar:sonar -Dsonar.login=${sonarqubeToken}"
