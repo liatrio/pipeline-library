@@ -1,7 +1,7 @@
 #!/bin/env groovy
 
-def call(Map params) {
-    withCredentials([sshUserPrivateKey(credentialsId: '71d94074-215d-4798-8430-40b98e223d8c', keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
+def call(Map params, String credentialsIdIn = '71d94074-215d-4798-8430-40b98e223d8c') {
+    withCredentials([sshUserPrivateKey(credentialsId: credentialsIdIn, keyFileVariable: 'keyFileVariable', passphraseVariable: '', usernameVariable: 'usernameVariable')]) {
         withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
             STAGE = env.STAGE_NAME
             sh "ssh -o StrictHostKeyChecking=no -i $keyFileVariable $usernameVariable@${params.env} docker login -u ${env.artifactoryUsername} -p ${env.artifactoryPassword} ${env.DOCKER_REPO}"
