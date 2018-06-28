@@ -1,2 +1,2 @@
-##### Runs a gradle build for the project
+<h3>Runs a gradle build for the project</h3>
 No Parameters

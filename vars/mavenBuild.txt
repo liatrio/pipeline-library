@@ -1,2 +1,2 @@
-##### Runs a maven build for the project
+<h3>Runs a maven build for the project</h3>
 No Parameters
