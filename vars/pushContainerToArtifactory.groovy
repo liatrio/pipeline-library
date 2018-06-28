@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 def call(tag) {
     STAGE = env.STAGE_NAME
     withCredentials([usernamePassword(credentialsId: 'Artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {

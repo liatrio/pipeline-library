@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 def call() {
     def jiraIssue = ''
     def gitLog = sh(

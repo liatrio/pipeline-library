@@ -1,4 +1,5 @@
-#!/bin/env groovy
+#!/usr/bin/env groovy
+
 def call() {
     def gitUrl = env.GIT_URL ? env.GIT_URL: env.GIT_URL_1
     hipchatSend color: 'GRAY', notify: true, v2enabled: true, message: "Building ${env.GIT_BRANCH} from: <a href=${gitUrl - ".git"}/commits/${env.GIT_COMMIT}>${gitUrl}</a>"

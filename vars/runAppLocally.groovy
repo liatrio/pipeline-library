@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 def call(Map params) {
     STAGE = env.STAGE_NAME
     sh "docker network create demo || true"

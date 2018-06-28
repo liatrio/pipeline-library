@@ -1,19 +1,9 @@
-/*
- * Deploys an application container to an environment.
- *
- * @param user User to connect to intance as.
- * @param instance FQDN of instance to deploy to.
- * @param credentialsId Id of private key credentials file used to connect to instance.
- * @param image Name of image to deploy.
- * @param tag Tag of image to deploy.
- * @param appName Unique identifer for application container
- * @param frontendRule URL to proxy application on.
- * @param loadBalanceGroup Backend group to place application in (optional)
- */
+#!/usr/bin/env groovy
+
 def call(String user, String instance, String pkCredentialsId, String image, String tag, String appName, String frontendRule, String loadBalanceGroup=null) {
     if (!loadBalanceGroup) {
         // Use unique name for loadBalanceGroup
-        loadBalanceGroup = appName;
+        loadBalanceGroup = appName
     }
     String dockerRm = "docker rm -f ${appName} || true"
     String dockerPull = "docker pull ${image}:${tag}"

@@ -1,0 +1,12 @@
+<h3>Deploys an application container to an environment.</h3>
+<h4>Parameters:</h4>
+<ul>
+<li><b>user:</b> User to connect to instance as.
+<li><b>instance:</b> FQDN of instance to deploy to.
+<li><b>credentialsId:</b> Id of private key credentials file used to connect to instance.
+<li><b>image:</b> Name of image to deploy.
+<li><b>tag:</b> Tag of image to deploy.
+<li><b>appName:</b> Unique identifier for application container
+<li><b>frontendRule:</b> URL to proxy application on.
+<li><b>loadBalanceGroup:</b> Backend group to place application in (optional)
+</ul>

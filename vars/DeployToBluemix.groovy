@@ -1,10 +1,8 @@
 #!/usr/bin/env groovy
 
-def call() {
+def call(String productName, String artifactPath, String nexus="http://nexus:8081") {
     def parsedText = readJSON file: "manifest.json"
-    productName = "liatrio-spring-petclinic"
-    productVersion ="snapshots/org/springframework/samples/spring-petclinic/1.0.0-SNAPSHOT/spring-petclinic-1.0.0-20170616.200355-43.war"
-    def urlForArtifact = "http://nexus:8081/nexus/content/repositories/${productVersion}"
+    def urlForArtifact = "${nexus}/nexus/content/repositories/${artifactPath}"
     sh "curl -o ${productName}.war ${urlForArtifact}"
     withCredentials([usernamePassword(credentialsId: 'bluemix', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
         sh 'cf api https://api.ng.bluemix.net'

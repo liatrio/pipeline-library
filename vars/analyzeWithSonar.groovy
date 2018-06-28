@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 def call() {
     withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarqubeToken')]) {
         sh "mvn sonar:sonar -Dsonar.login=${sonarqubeToken}"

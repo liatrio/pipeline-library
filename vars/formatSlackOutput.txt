@@ -1,0 +1,8 @@
+<h3>Formatter for details for outputting to Slack</h3>
+<h4>Parameters:</h4>
+<ul>
+<li><b>jobTitle:</b> Job title
+<li><b>jobUrl:</b> Job URL
+<li><b>jobChanges:</b> List of changes in the job
+<li><b>exitStatus:</b> Job exit status
+</ul>
