@@ -10,43 +10,29 @@ class Slack {
   public Slack() { /* empty */ }
 
   def sendBuildStart(body) {
-    def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
-
-    def author = "";
-
-    def getGitAuthor = {
-      def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
-      author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
-    }
-    def message = "";
-
-    def getLastCommitMessage = {
-      message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
-    }
-    def attachments = [
-      title: "${env.JOB_NAME}, build #${env.BUILD_NUMBER}",
-      title_link: "${env.BUILD_URL}",
+    def attachments = [[
+      title: "${body.jobName}, build #${body.buildNumber}",
+      title_link: "${body.title_link}",
       color: "primary",
-      text: "building\n${author}",
+      text: "building\n${body.author}",
       "mrkdwn_in": ["fields"],
       fields: [
         [
           title: "Branch",
-          value: "${env.GIT_BRANCH}",
+          value: "${body.branch}",
           short: true
         ],
         [
           title: "Last Commit",
-          value: "${message}",
+          value: "${body.message}",
           short: false
         ]
       ]
-    ]
+    ]]
     def payload = JsonOutput.toJson([
         text: "build has started!",
         channel: "${body.channel}",
         username: "Jenkins",
-        icon_url: jenkinsIcon,
         attachments: attachments
     ])
 
