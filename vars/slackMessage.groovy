@@ -3,7 +3,7 @@ import org.Slack.Slack
 
 def call(body) {
 
-  slackSend channel: env.SLACK_ROOM, message: "Maven build complete"
+  slackSend channel: env.SLACK_ROOM, message: "/greet"
   //Slack slack = new Slack()
   //if (body.event == "build-start"){
   //  slack.sendBuildStart()
