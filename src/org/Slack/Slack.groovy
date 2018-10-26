@@ -23,12 +23,31 @@ class Slack {
     def getLastCommitMessage = {
       message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
     }
+    def attachments = [
+      title: "${env.JOB_NAME}, build #${env.BUILD_NUMBER}",
+      title_link: "${env.BUILD_URL}",
+      color: "primary",
+      text: "building\n${author}",
+      "mrkdwn_in": ["fields"],
+      fields: [
+        [
+          title: "Branch",
+          value: "${env.GIT_BRANCH}",
+          short: true
+        ],
+        [
+          title: "Last Commit",
+          value: "${message}",
+          short: false
+        ]
+      ]
+    ]
     def payload = JsonOutput.toJson([
         text: "build has started!",
         channel: "${body.channel}",
         username: "Jenkins",
         icon_url: jenkinsIcon,
-        attachments: []
+        attachments: attachments
     ])
 
     return payload
