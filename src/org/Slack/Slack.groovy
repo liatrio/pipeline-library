@@ -9,7 +9,7 @@ class Slack {
 
   public Slack() { /* empty */ }
 
-  def sendBuildStart() {
+  def sendBuildStart(body) {
     def slackURL = "${body.slackURL}"
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
@@ -21,7 +21,7 @@ class Slack {
         attachments: []
     ])
 
-    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+    "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}".execute()
   }
 
   def sendBuildComplete() {
