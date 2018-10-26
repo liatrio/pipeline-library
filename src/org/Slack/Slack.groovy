@@ -21,7 +21,8 @@ class Slack {
         attachments: []
     ])
 
-    "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}".execute()
+    println "ls".execute().text
+    println "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}".execute().text
   }
 
   def sendBuildComplete() {
