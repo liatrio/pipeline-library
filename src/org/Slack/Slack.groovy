@@ -10,7 +10,6 @@ class Slack {
   public Slack() { /* empty */ }
 
   def sendBuildStart(body) {
-    def slackURL = "${body.slackURL}"
     def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
 
     def payload = JsonOutput.toJson([
@@ -21,8 +20,8 @@ class Slack {
         attachments: []
     ])
 
-    println "ls".execute().text
-    println "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}".execute().text
+    return payload
+
   }
 
   def sendBuildComplete() {
