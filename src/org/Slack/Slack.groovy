@@ -15,7 +15,7 @@ class Slack {
       title_link: "${body.title_link}",
       color: "#cccc00",
       text: "building\n${body.author}",
-      "author_name": "Building Credit Card app",
+      "author_name": "${body.message}",
       "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif",
       "mrkdwn_in": ["fields"],
       fields: [
@@ -32,8 +32,8 @@ class Slack {
       ]
     ]]
     def payload = JsonOutput.toJson([
-        text: "build has started!",
         channel: "${body.channel}",
+        token: "${body.token}",
         username: "Jenkins",
         attachments: attachments
     ])
@@ -66,6 +66,7 @@ class Slack {
     def payload = JsonOutput.toJson([
         text: "build has completed!",
         channel: "${body.channel}",
+        token: "${body.token}",
         username: "Jenkins",
         attachments: attachments
     ])

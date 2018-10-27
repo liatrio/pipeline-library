@@ -14,6 +14,7 @@ def call(body) {
 
     def payload = slack.sendBuildStart([
                     slackURL: "${body.slackURL}",
+                    token: "${body.token}",
                     jobName: "${env.JOB_NAME}",
                     buildNumber: "${env.BUILD_NUMBER}",
                     branch: "${env.BRANCH_NAME}",
@@ -23,7 +24,7 @@ def call(body) {
                     channel: "${body.channel}"
                   ])
 //    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${body.slackURL}"
-    def response = httpRequest validResponseCodes: '400,409,201,200', consoleLogResponseBody: true, acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: payload, url: "https://liatrio.slack.com/api/chat.postMessage"
+    def response = httpRequest validResponseCodes: '400,409,201,200', authentication: "pipeline-pal-slack", consoleLogResponseBody: true, acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: payload, url: "https://liatrio.slack.com/api/chat.postMessage"
     //def json = readJSON text: response.content 
     //println json
     sh "echo ${response.content}"  
@@ -35,6 +36,7 @@ def call(body) {
 
     //def payload = slack.sendBuildComplete([
     //                slackURL: "${body.slackURL}",
+    //                token: "${body.token}",
     //                jobName: "${env.JOB_NAME}",
     //                buildNumber: "${env.BUILD_NUMBER}",
     //                branch: "${env.BRANCH_NAME}",
