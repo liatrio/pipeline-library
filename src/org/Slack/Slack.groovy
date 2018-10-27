@@ -33,11 +33,11 @@ class Slack {
     ]]
     def payload = JsonOutput.toJson([
         channel: "${body.channel}",
-        "token": "${body.token}",
+        access_token: "${body.token}",
         username: "Jenkins",
         attachments: attachments
     ])
-
+    sh "echo ${body.token}"
     return payload
 
   }
