@@ -27,6 +27,11 @@ class Slack {
           title: "Last Commit",
           value: "${body.message}",
           short: true
+        ],
+        [
+          title: "Change Log",
+          value: "${body.changeLog}",
+          short: false
         ]
       ]
     ]]
