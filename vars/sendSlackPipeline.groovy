@@ -3,7 +3,7 @@ import org.Slack.Slack
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
 
-def call(body) {
+def call() {
 
   Slack slack = new Slack()
   def jenkinsfile = readFile file: "Jenkinsfile"
@@ -16,7 +16,7 @@ def call(body) {
   def messagesJSON = []
   
   def payloads = slack.sendPipelineInfo([
-                  slackURL: "${body.slackURL}",
+                  slackURL: "${env.SLACK_WEBHOOK_URL}",
                   jobName: "${env.JOB_NAME}",
                   stageNames: stageNames,
                   buildNumber: "${env.BUILD_NUMBER}",
@@ -24,10 +24,10 @@ def call(body) {
                   title_link: "${env.BUILD_URL}",
                   author: "${author}",
                   message: "${message}",
-                  channel: "${body.channel}"
+                  channel: "${env.SLACK_ROOM}"
                 ])
   for (int i = 0; i < payloads.size(); i++){
-    messages.add(sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payloads[i]}\' ${body.slackURL}/api/chat.postMessage").trim())
+    messages.add(sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payloads[i]}\' ${env.SLACK_WEBHOOK_URL}/api/chat.postMessage").trim())
   }
   for (int i = 0; i < messages.size(); i++){
     def json = readJSON text: messages[i]

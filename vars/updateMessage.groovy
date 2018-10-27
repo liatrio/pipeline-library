@@ -3,16 +3,16 @@ import org.Slack.Slack
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
 
-def call(body) {
-
+def call(status, messages) {
   Slack slack = new Slack()
-  else if ("${body.event}" == "build-complete"){
-    def payload = slack.sendBuildComplete([ ts: "${body.messages[1].ts}", message: "${body.message}", channel: "${body.channel}"])
+  def jenkinsfile = readFile file: "Jenkinsfile"
+  def stageNames = getStageNames(jenkinsfile)
+
+  for (int i = 0; i < stageNames.size(); i++){
+    if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
+    def payload = slack.updateMessage(stageName[i], status, messages[i].ts)
     sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.update").trim() 
-  }
-  else if ("${body.event}" == "sonar-start"){
-    def payload = slack.sendSonarStart([ ts: "${body.messages[2].ts}", message: "${body.message}", channel: "${body.channel}"])
-    sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.update").trim() 
+    }
   }
 
 }

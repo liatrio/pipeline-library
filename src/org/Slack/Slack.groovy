@@ -44,19 +44,51 @@ class Slack {
 
     for (int i = 0; i < body.stageNames.size(); i++){
       def stage = [[
-        color: "#cccc00",
-        "author_name": "${body.stageNames[i]}",
+        color: "primary",
+        "author_name": "${body.stageNames[i]}: Not started",
       ]]
       def stageMessage = JsonOutput.toJson([
           channel: "${body.channel}",
           username: "Jenkins",
           attachments: stage 
       ])
-      payloads.add(stageMessage )
+      payloads.add(stageMessage)
     }
 
     return payloads
 
+  }
+  def updateMessage(name, status, ts) {
+    if (status == "running"){
+      def stage = [[
+        color: "#cccc00",
+        "author_name": "${name}: running",
+        "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
+      ]]
+      def payload = JsonOutput.toJson([
+          ts: "${body.ts}",
+          channel: "${body.channel}",
+          username: "Jenkins",
+          attachments: stage  
+      ])
+
+      return payload
+    }
+    else if (status == "passed"){
+      def stage = [[
+        color: "#45B254",
+        "author_name": "${name}: passed!",
+        "author_icon": "https://images.atomist.com/rug/check-circle.png"
+      ]]
+      def payload = JsonOutput.toJson([
+          ts: "${body.ts}",
+          channel: "${body.channel}",
+          username: "Jenkins",
+          attachments: stage  
+      ])
+
+      return payload
+    }
   }
 
   def sendBuildComplete(body) {
