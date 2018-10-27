@@ -81,45 +81,14 @@ class Slack {
         "author_icon": "https://images.atomist.com/rug/check-circle.png"
       ]]
       def payload = JsonOutput.toJson([
-          ts: "${body.ts}",
-          channel: "${body.channel}",
+          ts: "${ts}",
+          channel: "${channel}",
           username: "Jenkins",
           attachments: stage  
       ])
 
       return payload
     }
-  }
-
-  def sendBuildComplete(body) {
-    def buildStage = [[
-      color: "#45B254",
-      "author_name": "Build has passed!",
-      "author_icon": "https://images.atomist.com/rug/check-circle.png"
-    ]]
-    def payload = JsonOutput.toJson([
-        ts: "${body.ts}",
-        channel: "${body.channel}",
-        username: "Jenkins",
-        attachments: buildStage  
-    ])
-
-    return payload
-  }
-  def sendSonarStart(body) {
-    def sonarStage = [[
-      color: "#cccc00",
-      "author_name": "Running sonar analysis",
-      "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
-    ]]
-    def payload = JsonOutput.toJson([
-        ts: "${body.ts}",
-        channel: "${body.channel}",
-        username: "Jenkins",
-        attachments: sonarStage  
-    ])
-
-    return payload
   }
 }
 
