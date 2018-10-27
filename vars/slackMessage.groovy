@@ -11,8 +11,8 @@ def call(body) {
     def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim() 
-
-    def payload = slack.sendBuildStart([
+    
+    def payloads = slack.sendPipelineInfo([
                     slackURL: "${body.slackURL}",
                     token: "${body.token}",
                     jobName: "${env.JOB_NAME}",
@@ -23,29 +23,31 @@ def call(body) {
                     message: "${message}",
                     channel: "${body.channel}"
                   ])
+//    def payload = slack.sendBuildStart([
+//                    slackURL: "${body.slackURL}",
+//                    token: "${body.token}",
+//                    jobName: "${env.JOB_NAME}",
+//                    buildNumber: "${env.BUILD_NUMBER}",
+//                    branch: "${env.BRANCH_NAME}",
+//                    title_link: "${env.BUILD_URL}",
+//                    author: "${author}",
+//                    message: "${message}",
+//                    channel: "${body.channel}"
+//                  ])
 //    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${body.slackURL}"
-    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.postMessage").trim() 
-    //def json = readJSON text: response.content 
+    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payloads[0]}\' ${body.slackURL}/api/chat.postMessage").trim()
+    def json = readJSON text: response 
     //println json
-    sh "echo ${response}"  
+    sh "echo ${json.ts}"  
   }
   else if ("${body.event}" == "build-complete"){
-    //def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
-    //def author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
-    //def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim() 
 
-    //def payload = slack.sendBuildComplete([
-    //                slackURL: "${body.slackURL}",
-    //                token: "${body.token}",
-    //                jobName: "${env.JOB_NAME}",
-    //                buildNumber: "${env.BUILD_NUMBER}",
-    //                branch: "${env.BRANCH_NAME}",
-    //                title_link: "${env.BUILD_URL}",
-    //                author: "${author}",
-    //                message: "${message}",
-    //                channel: "${body.channel}"
-    //              ])
-    //sh "curl -X POST --data-urlencode \'payload=${payload}\' ${body.slackURL}"
+    def payload = slack.sendBuildComplete([
+                    slackURL: "${body.slackURL}",
+                    message: "${body.message}",
+                    channel: "${body.channel}"
+                  ])
+    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.postMessage").trim() 
   }
 
 }

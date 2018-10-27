@@ -9,7 +9,8 @@ class Slack {
 
   public Slack() { /* empty */ }
 
-  def sendBuildStart(body) {
+  def sendPipelineInfo(body) {
+    def payloads = []
     def attachments = [[
       title: "${body.jobName}, build #${body.buildNumber}",
       title_link: "${body.title_link}",
@@ -36,7 +37,8 @@ class Slack {
         username: "Jenkins",
         attachments: attachments
     ])
-    return payload
+    payloads.add(payload)
+    return payloads
 
   }
 
