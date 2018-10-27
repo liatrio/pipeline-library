@@ -30,10 +30,11 @@ class Slack {
       ]
     ]]
     def payload = JsonOutput.toJson([
-        text: "/greet"
-        //channel: "${body.channel}",
-        //username: "Jenkins",
-        //attachments: attachments
+        text: "build has started!",
+        channel: "${body.channel}",
+        id: 1,
+        username: "Jenkins",
+        attachments: attachments
     ])
 
     return payload
