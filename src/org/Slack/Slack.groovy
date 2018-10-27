@@ -42,22 +42,18 @@ class Slack {
     ])
     payloads.add(title)
 
-
-    def buildStage = [[
-      color: "#cccc00",
-      "author_name": "building ${body.jobName}",
-      "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
-    ]]
-    def build = JsonOutput.toJson([
-        channel: "${body.channel}",
-        username: "Jenkins",
-        attachments: buildStage 
-    ])
-    payloads.add(build)
-
-    def sonarStage = [[ color: "#primary", "author_name": "Running sonar analysis", ]]
-    def sonar = JsonOutput.toJson([ channel: "${body.channel}", username: "Jenkins", attachments: sonarStage ])
-    payloads.add(sonar)
+    for (int i = 0; i < body.stageNames.size(); i++){
+      def stage = [[
+        color: "#cccc00",
+        "author_name": "${body.stageNames[i]}",
+      ]]
+      def stageMessage = JsonOutput.toJson([
+          channel: "${body.channel}",
+          username: "Jenkins",
+          attachments: stage 
+      ])
+      payloads.add(stageMessage )
+    }
 
     return payloads
 
