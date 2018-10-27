@@ -11,13 +11,11 @@ class Slack {
 
   def sendPipelineInfo(body) {
     def payloads = []
-    def attachments = [[
+    def pipelineTitle = [[
       title: "${body.jobName}, build #${body.buildNumber}",
       title_link: "${body.title_link}",
-      color: "#cccc00",
-      text: "building\n${body.author}",
-      "author_name": "${body.message}",
-      "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif",
+      color: "primary",
+      text: "building started by\n${body.author}",
       "mrkdwn_in": ["fields"],
       fields: [
         [
@@ -32,12 +30,25 @@ class Slack {
         ]
       ]
     ]]
-    def payload = JsonOutput.toJson([
+    def title = JsonOutput.toJson([
         channel: "${body.channel}",
         username: "Jenkins",
-        attachments: attachments
+        attachments: pipelineTitle 
     ])
-    payloads.add(payload)
+    payloads.add(title)
+
+
+    def buildStage = [[
+      color: "#cccc00",
+      "author_name": "${body.message}",
+      "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
+    ]]
+    def build = JsonOutput.toJson([
+        channel: "${body.channel}",
+        username: "Jenkins",
+        attachments: pipelineTitle 
+    ])
+    payloads.add(build)
     return payloads
 
   }
