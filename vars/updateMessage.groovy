@@ -10,7 +10,7 @@ def call(status, messages) {
 
   for (int i = 0; i < stageNames.size(); i++){
     if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
-    def payload = slack.updateMessage(stageName[i], status, messages[i].ts)
+    def payload = slack.updateMessage(stageNames[i], status, messages[i].ts)
     sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.update").trim() 
     }
   }
