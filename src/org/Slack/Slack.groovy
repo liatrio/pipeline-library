@@ -15,7 +15,7 @@ class Slack {
       title: "${body.jobName}, build #${body.buildNumber}",
       title_link: "${body.title_link}",
       color: "primary",
-      text: "building started by\n${body.author}",
+      text: "buildstarted by\n${body.author}",
       "mrkdwn_in": ["fields"],
       fields: [
         [
@@ -49,6 +49,11 @@ class Slack {
         attachments: buildStage 
     ])
     payloads.add(build)
+
+    def sonarStage = [[ color: "#primary", "author_name": "Running sonar analysis", ]]
+    def sonar = JsonOutput.toJson([ channel: "${body.channel}", username: "Jenkins", attachments: sonarStage ])
+    payloads.add(sonar)
+
     return payloads
 
   }
@@ -64,6 +69,21 @@ class Slack {
         channel: "${body.channel}",
         username: "Jenkins",
         attachments: buildStage  
+    ])
+
+    return payload
+  }
+  def sendSonarStart(body) {
+    def sonarStage = [[
+      color: "#cccc00",
+      "author_name": "Running sonar analysis",
+      "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
+    ]]
+    def payload = JsonOutput.toJson([
+        ts: "${body.ts}",
+        channel: "${body.channel}",
+        username: "Jenkins",
+        attachments: sonarStage  
     ])
 
     return payload

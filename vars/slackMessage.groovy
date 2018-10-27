@@ -34,15 +34,12 @@ def call(body) {
     return messagesJSON
   }
   else if ("${body.event}" == "build-complete"){
-  
-    def payload = slack.sendBuildComplete([
-                    slackURL: "${body.slackURL}",
-                    ts: "${body.messages[1].ts}",
-                    message: "${body.message}",
-                    channel: "${body.channel}"
-                  ])
-    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.update").trim() 
+    def payload = slack.sendBuildComplete([ ts: "${body.messages[1].ts}", message: "${body.message}", channel: "${body.channel}"])
+    sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.update").trim() 
+  }
+  else if ("${body.event}" == "sonar-start"){
+    def payload = slack.sendSonarStart([ ts: "${body.messages[2].ts}", message: "${body.message}", channel: "${body.channel}"])
+    sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.update").trim() 
   }
 
 }
-
