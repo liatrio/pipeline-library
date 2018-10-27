@@ -46,7 +46,7 @@ class Slack {
     def build = JsonOutput.toJson([
         channel: "${body.channel}",
         username: "Jenkins",
-        attachments: pipelineTitle 
+        attachments: buildStage 
     ])
     payloads.add(build)
     return payloads

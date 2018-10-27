@@ -31,17 +31,22 @@ def call(body) {
     for (int i = 0; i < messages.size(); i++){
       def json = readJSON text: messages[i]
       messagesJSON.add(json)
-      echo json.ts
+      echo json
     }
+    return messagesJSON
   }
   else if ("${body.event}" == "build-complete"){
 
+    for (int i = 0; i < body.messages.size(); i++){
+      if (body.messages[i].)
+    }
+  
     def payload = slack.sendBuildComplete([
                     slackURL: "${body.slackURL}",
                     message: "${body.message}",
                     channel: "${body.channel}"
                   ])
-    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.postMessage").trim() 
+    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.update").trim() 
   }
 
 }
