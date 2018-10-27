@@ -33,7 +33,6 @@ class Slack {
     ]]
     def payload = JsonOutput.toJson([
         text: "build has started!",
-        ts: 1405894322.002768,
         channel: "${body.channel}",
         username: "Jenkins",
         attachments: attachments
@@ -66,7 +65,6 @@ class Slack {
     ]]
     def payload = JsonOutput.toJson([
         text: "build has completed!",
-        ts: 1405894322.002768,
         channel: "${body.channel}",
         username: "Jenkins",
         attachments: attachments
