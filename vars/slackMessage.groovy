@@ -23,10 +23,8 @@ def call(body) {
                     message: "${message}",
                     channel: "${body.channel}"
                   ])
-    sh "echo ${body.channel}"
 //    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${body.slackURL}"
-    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' --data-urlencode \'payload=${payload}\' https://liatrio.slack.com/api/chat.postMessage").trim() 
-    //def response = httpRequest validResponseCodes: '400,409,201,200', consoleLogResponseBody: true, acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: payload, url: "https://liatrio.slack.com/api/chat.postMessage"
+    def response = sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${body.token}' -H \"Content-Type: application/json\" --data \'${payload}\' ${body.slackURL}/api/chat.postMessage").trim() 
     //def json = readJSON text: response.content 
     //println json
     sh "echo ${response}"  
