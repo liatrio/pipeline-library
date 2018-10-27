@@ -15,6 +15,7 @@ def call() {
   def messages = []
   def messagesJSON = []
   
+  sh "echo ${stageNames}" 
   def payloads = slack.sendPipelineInfo([
                   slackURL: "${env.SLACK_WEBHOOK_URL}",
                   jobName: "${env.JOB_NAME}",
