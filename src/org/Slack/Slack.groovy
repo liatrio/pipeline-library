@@ -58,7 +58,7 @@ class Slack {
     return payloads
 
   }
-  def updateMessage(name, status, ts) {
+  def updateMessage(channel, name, status, ts) {
     if (status == "running"){
       def stage = [[
         color: "#cccc00",
@@ -66,8 +66,8 @@ class Slack {
         "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
       ]]
       def payload = JsonOutput.toJson([
-          ts: "${body.ts}",
-          channel: "${body.channel}",
+          ts: "${ts}",
+          channel: "${channel}",
           username: "Jenkins",
           attachments: stage  
       ])
