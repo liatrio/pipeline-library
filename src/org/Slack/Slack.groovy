@@ -40,7 +40,7 @@ class Slack {
 
     def buildStage = [[
       color: "#cccc00",
-      "author_name": "${body.message}",
+      "author_name": "building ${body.jobName}",
       "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
     ]]
     def build = JsonOutput.toJson([
@@ -54,31 +54,16 @@ class Slack {
   }
 
   def sendBuildComplete(body) {
-    def attachments = [[
-      title: "${body.jobName}, build #${body.buildNumber}",
-      title_link: "${body.title_link}",
+    def buildStage = [[
       color: "#45B254",
       "author_name": "Build has passed!",
-      "author_icon": "https://images.atomist.com/rug/check-circle.png",
-      "mrkdwn_in": ["fields"],
-      fields: [
-        [
-          title: "Branch",
-          value: "${body.branch}",
-          short: true
-        ],
-        [
-          title: "Last Commit",
-          value: "${body.message}",
-          short: true
-        ]
-      ]
+      "author_icon": "https://images.atomist.com/rug/check-circle.png"
     ]]
     def payload = JsonOutput.toJson([
-        text: "build has completed!",
+        ts: "${body.ts}",
         channel: "${body.channel}",
         username: "Jenkins",
-        attachments: attachments
+        attachments: buildStage  
     ])
 
     return payload

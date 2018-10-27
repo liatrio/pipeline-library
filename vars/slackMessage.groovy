@@ -16,7 +16,6 @@ def call(body) {
     
     def payloads = slack.sendPipelineInfo([
                     slackURL: "${body.slackURL}",
-                    token: "${body.token}",
                     jobName: "${env.JOB_NAME}",
                     buildNumber: "${env.BUILD_NUMBER}",
                     branch: "${env.BRANCH_NAME}",
@@ -31,18 +30,14 @@ def call(body) {
     for (int i = 0; i < messages.size(); i++){
       def json = readJSON text: messages[i]
       messagesJSON.add(json)
-      echo json
     }
     return messagesJSON
   }
   else if ("${body.event}" == "build-complete"){
-
-    for (int i = 0; i < body.messages.size(); i++){
-      if (body.messages[i].)
-    }
   
     def payload = slack.sendBuildComplete([
                     slackURL: "${body.slackURL}",
+                    ts: "${body.messages[0].ts}",
                     message: "${body.message}",
                     channel: "${body.channel}"
                   ])
