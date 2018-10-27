@@ -37,7 +37,7 @@ def call(body) {
   
     def payload = slack.sendBuildComplete([
                     slackURL: "${body.slackURL}",
-                    ts: "${body.messages[0].ts}",
+                    ts: "${body.messages[1].ts}",
                     message: "${body.message}",
                     channel: "${body.channel}"
                   ])
