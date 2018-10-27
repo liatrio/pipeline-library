@@ -27,11 +27,6 @@ class Slack {
           title: "Last Commit",
           value: "${body.message}",
           short: true
-        ],
-        [
-          title: "Change Log",
-          value: "${body.changeLog}",
-          short: false
         ]
       ]
     ]]
@@ -58,6 +53,7 @@ class Slack {
     return payloads
 
   }
+
   def updateMessage(channel, name, status, ts) {
     if (status == "running"){
       def stage = [[
