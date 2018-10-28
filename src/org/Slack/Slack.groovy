@@ -92,6 +92,7 @@ class Slack {
     def stage = [[
       color: "danger",
       "author_name": "${name}: failed",
+      "mrkdwn_in": ["text"],
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/red-circle.png?raw=true",
       "text": "```${log}```"
     ]]
