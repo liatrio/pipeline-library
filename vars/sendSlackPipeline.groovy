@@ -28,7 +28,7 @@ def call() {
                   channel: "${env.SLACK_ROOM}"
                 ])
   for (int i = 0; i < payloads.size(); i++){
-    messages.add(sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payloads[i]}\' ${env.SLACK_WEBHOOK_URL}/api/chat.postMessage").trim())
+    messages.add(sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payloads[i]}\' ${env.SLACK_WEBHOOK_URL}/api/chat.postMessage").trim())
   }
   for (int i = 0; i < messages.size(); i++){
     def json = readJSON text: messages[i]

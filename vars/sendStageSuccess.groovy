@@ -11,7 +11,7 @@ def call(messages) {
   for (int i = 0; i < stageNames.size(); i++){
     if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
       def payload = slack.sendStageSuccess("${env.SLACK_ROOM}", stageNames[i], messages[i+1].ts)
-      sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
+      sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
     }
   }
 
