@@ -85,5 +85,21 @@ class Slack {
 
     return payload
   }
+  def sendPipelineFailure(channel, name, ts, log) {
+    def stage = [[
+      color: "danger",
+      "author_name": "${name}: failed",
+      //"author_icon": ""
+      "text": "```${log}```"
+    ]]
+    def payload = JsonOutput.toJson([
+        ts: "${ts}",
+        channel: "${channel}",
+        username: "Jenkins",
+        attachments: stage  
+    ])
+
+    return payload
+  }
 }
 
