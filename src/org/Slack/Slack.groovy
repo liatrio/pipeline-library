@@ -15,7 +15,7 @@ class Slack {
       title: "${body.jobName}, build #${body.buildNumber}",
       title_link: "${body.title_link}",
       color: "primary",
-      text: "buildstarted by\n${body.author}",
+      text: "build started by\n${body.author}",
       "mrkdwn_in": ["fields"],
       fields: [
         [

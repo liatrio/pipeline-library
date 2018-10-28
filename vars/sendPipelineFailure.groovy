@@ -8,7 +8,7 @@ def call(messages) {
   def jenkinsfile = readFile file: "Jenkinsfile"
   def stageNames = getStageNames(jenkinsfile)
 
-  def log = sh(returnStdout: true, script: "curl -o consoleText.txt ${BUILD_URL}/consoleText ; cat consoleText.txt").trim()
+  def log = sh(returnStdout: true, script: "wget ${BUILD_URL}consoleText ; cat consoleText").trim()
 
   for (int i = 0; i < stageNames.size(); i++){
     if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
