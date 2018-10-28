@@ -54,37 +54,36 @@ class Slack {
 
   }
 
-  def updateMessage(channel, name, status, ts) {
-    if (status == "running"){
-      def stage = [[
-        color: "#cccc00",
-        "author_name": "${name}: running",
-        "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
-      ]]
-      def payload = JsonOutput.toJson([
-          ts: "${ts}",
-          channel: "${channel}",
-          username: "Jenkins",
-          attachments: stage  
-      ])
+  def sendStageRunning(channel, name, status, ts) {
+    def stage = [[
+      color: "#cccc00",
+      "author_name": "${name}: running",
+      "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
+    ]]
+    def payload = JsonOutput.toJson([
+        ts: "${ts}",
+        channel: "${channel}",
+        username: "Jenkins",
+        attachments: stage  
+    ])
 
-      return payload
-    }
-    else if (status == "passed"){
-      def stage = [[
-        color: "#45B254",
-        "author_name": "${name}: passed!",
-        "author_icon": "https://images.atomist.com/rug/check-circle.png"
-      ]]
-      def payload = JsonOutput.toJson([
-          ts: "${ts}",
-          channel: "${channel}",
-          username: "Jenkins",
-          attachments: stage  
-      ])
+    return payload
+  }
 
-      return payload
-    }
+  def sendStageSuccess(channel, name, status, ts) {
+    def stage = [[
+      color: "#45B254",
+      "author_name": "${name}: passed!",
+      "author_icon": "https://images.atomist.com/rug/check-circle.png"
+    ]]
+    def payload = JsonOutput.toJson([
+        ts: "${ts}",
+        channel: "${channel}",
+        username: "Jenkins",
+        attachments: stage  
+    ])
+
+    return payload
   }
 }
 
