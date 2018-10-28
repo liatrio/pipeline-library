@@ -41,6 +41,7 @@ class Slack {
       def stage = [[
         color: "primary",
         "author_name": "${body.stageNames[i]}: Not started",
+        "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/grey-circle.jpeg?raw=true"
       ]]
       def stageMessage = JsonOutput.toJson([
           channel: "${body.channel}",
@@ -58,7 +59,8 @@ class Slack {
     def stage = [[
       color: "#cccc00",
       "author_name": "${name}: running",
-      "author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
+      //"author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
+      "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/pulsating-circle.gif?raw=true"
     ]]
     def payload = JsonOutput.toJson([
         ts: "${ts}",
@@ -74,7 +76,8 @@ class Slack {
     def stage = [[
       color: "#45B254",
       "author_name": "${name}: passed!",
-      "author_icon": "https://images.atomist.com/rug/check-circle.png"
+      //"author_icon": "https://images.atomist.com/rug/check-circle.png"
+      "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/check-circle.png?raw=true"
     ]]
     def payload = JsonOutput.toJson([
         ts: "${ts}",
@@ -89,7 +92,7 @@ class Slack {
     def stage = [[
       color: "danger",
       "author_name": "${name}: failed",
-      //"author_icon": ""
+      "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/red-circle.png?raw=true",
       "text": "```${log}```"
     ]]
     def payload = JsonOutput.toJson([
