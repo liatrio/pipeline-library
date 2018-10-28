@@ -8,7 +8,7 @@ def call(messages) {
   def jenkinsfile = readFile file: "Jenkinsfile"
   def stageNames = getStageNames(jenkinsfile)
 
-  def log = sh(returnStdout: true, script: "curl -o consoleText.txt -u ${username}:${password} ${BUILD_URL}consoleText ; cat consoleText.txt").trim()
+  def log = currentBuild.rawBuild.getLog(100) 
 
   for (int i = 0; i < stageNames.size(); i++){
     if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
