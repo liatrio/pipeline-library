@@ -54,7 +54,7 @@ class Slack {
 
   }
 
-  def sendStageRunning(channel, name, status, ts) {
+  def sendStageRunning(channel, name, ts) {
     def stage = [[
       color: "#cccc00",
       "author_name": "${name}: running",
@@ -70,7 +70,7 @@ class Slack {
     return payload
   }
 
-  def sendStageSuccess(channel, name, status, ts) {
+  def sendStageSuccess(channel, name, ts) {
     def stage = [[
       color: "#45B254",
       "author_name": "${name}: passed!",

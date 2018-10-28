@@ -3,14 +3,14 @@ import org.Slack.Slack
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
 
-def call(status, messages) {
+def call(messages) {
   Slack slack = new Slack()
   def jenkinsfile = readFile file: "Jenkinsfile"
   def stageNames = getStageNames(jenkinsfile)
 
   for (int i = 0; i < stageNames.size(); i++){
     if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
-      def payload = slack.sendStageSuccess("${env.SLACK_ROOM}", stageNames[i], status, messages[i+1].ts)
+      def payload = slack.sendStageSuccess("${env.SLACK_ROOM}", stageNames[i], messages[i+1].ts)
       sh(returnStdout: true, script: "curl -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
     }
   }
