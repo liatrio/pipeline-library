@@ -11,8 +11,7 @@ def call(messages) {
   for (int i = 0; i < stageNames.size(); i++){
     if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
       def payload = slack.sendStageRunning("${env.SLACK_ROOM}", stageNames[i], messages[i+1].ts)
-      //sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
-      sh "curl -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update" 
+      sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
       //def response = httpRequest customHeaders: [
       //  [ name: 'Authorization', value: "Bearer ${env.SLACK_TOKEN}" ]
       //], contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: payload, url: "${env.SLACK_WEBHOOK_URL}/api/chat.update"
