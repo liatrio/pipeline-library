@@ -46,6 +46,7 @@ class Slack {
       def stageMessage = JsonOutput.toJson([
           channel: "${body.channel}",
           username: "Jenkins",
+          as_user: true,
           attachments: stage 
       ])
       payloads.add(stageMessage)
@@ -66,6 +67,7 @@ class Slack {
         ts: "${ts}",
         channel: "${channel}",
         username: "Jenkins",
+        as_user: true,
         attachments: stage  
     ])
 
@@ -83,6 +85,7 @@ class Slack {
         ts: "${ts}",
         channel: "${channel}",
         username: "Jenkins",
+        as_user: true,
         attachments: stage  
     ])
 
@@ -100,6 +103,7 @@ class Slack {
         ts: "${ts}",
         channel: "${channel}",
         username: "Jenkins",
+        as_user: true,
         attachments: stage  
     ])
 
