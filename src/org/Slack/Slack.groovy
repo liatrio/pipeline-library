@@ -37,20 +37,36 @@ class Slack {
     ])
     payloads.add(title)
 
+    //for (int i = 0; i < body.stageNames.size(); i++){
+    //  def stage = [[
+    //    color: "primary",
+    //    "author_name": "${body.stageNames[i]}: Not started",
+    //    "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/grey-circle.jpeg?raw=true"
+    //  ]]
+    //  def stageMessage = JsonOutput.toJson([
+    //      channel: "${body.channel}",
+    //      username: "Jenkins",
+    //      as_user: true,
+    //      attachments: stage 
+    //  ])
+    //  payloads.add(stageMessage)
+    //}
+    def stage = []
     for (int i = 0; i < body.stageNames.size(); i++){
-      def stage = [[
+      def s = [
         color: "primary",
         "author_name": "${body.stageNames[i]}: Not started",
         "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/grey-circle.jpeg?raw=true"
-      ]]
-      def stageMessage = JsonOutput.toJson([
-          channel: "${body.channel}",
-          username: "Jenkins",
-          as_user: true,
-          attachments: stage 
-      ])
-      payloads.add(stageMessage)
+      ]
+      stage.add(s)
     }
+    def stageMessage = JsonOutput.toJson([
+        channel: "${body.channel}",
+        username: "Jenkins",
+        as_user: true,
+        attachments: stage 
+    ])
+    payloads.add(stageMessage)
 
     return payloads
 
@@ -60,7 +76,6 @@ class Slack {
     def stage = [[
       color: "#cccc00",
       "author_name": "${name}: running",
-      //"author_icon": "https://images.atomist.com/rug/pulsating-circle.gif"
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/pulsating-circle.gif?raw=true"
     ]]
     def payload = JsonOutput.toJson([
@@ -78,7 +93,6 @@ class Slack {
     def stage = [[
       color: "#45B254",
       "author_name": "${name}: passed!",
-      //"author_icon": "https://images.atomist.com/rug/check-circle.png"
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/check-circle.png?raw=true"
     ]]
     def payload = JsonOutput.toJson([
