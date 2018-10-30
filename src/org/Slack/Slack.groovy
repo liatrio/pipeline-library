@@ -37,20 +37,22 @@ class Slack {
     ])
     payloads.add(title)
 
+    def stages = []
     for (int i = 0; i < body.stageNames.size(); i++){
-      def stage = [[
+      def stage = [
         color: "primary",
         "author_name": "${body.stageNames[i]}: Not started",
         "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/grey-circle.jpeg?raw=true"
-      ]]
-      def stageMessage = JsonOutput.toJson([
-          channel: "${body.channel}",
-          username: "Jenkins",
-          as_user: true,
-          attachments: stage 
-      ])
-      payloads.add(stageMessage)
+      ]
+      stages.add(stage)
     }
+    def stagesMessage = JsonOutput.toJson([
+        channel: "${body.channel}",
+        username: "Jenkins",
+        as_user: true,
+        attachments: stages
+    ])
+    payloads.add(stagesMessage)
     //def stage = []
     //for (int i = 0; i < body.stageNames.size(); i++){
     //  def s = [
