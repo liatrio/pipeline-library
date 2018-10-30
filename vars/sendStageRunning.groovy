@@ -5,12 +5,12 @@ import groovy.json.JsonOutput
 
 def call(messages) {
   Slack slack = new Slack()
-  def jenkinsfile = readFile file: "Jenkinsfile"
-  def stageNames = getStageNames(jenkinsfile)
 
-  for (int i = 0; i < stageNames.size(); i++){
-    if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
-      def payload = slack.sendStageRunning("${env.SLACK_ROOM}", stageNames[i], messages[i+1].ts)
+  messages[1].message.attachments.eachWithIndex { attachment, index ->
+    def name = attachment.author_name.replaceAll(": Not started", "")
+    sh "echo ${name}"
+    if ("${name}" == "${env.STAGE_NAME}"){
+      def payload = slack.sendStageRunning("${env.SLACK_ROOM}", name, messages[1].ts, index, messages[1].message.attachments.size())
       sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
       //def response = httpRequest customHeaders: [
       //  [ name: 'Authorization', value: "Bearer ${env.SLACK_TOKEN}" ]
@@ -18,28 +18,4 @@ def call(messages) {
     }
   }
 
-}
-
-def getStageNames(jenkinsfile){
-
-  def names = []
-  def lines = jenkinsfile.readLines()
-
-  for (int i = 0; i < lines.size(); i++){
-    def line = lines[i]
-    if (line.trim().size() == 0){}
-    else {
-      if (line.contains("stage(\'")){
-        String [] tokens = line.split("\'");
-        String stage = tokens[1]; 
-        names.add(stage)
-      }
-      else if (line.contains("stage(\"")){
-        String [] tokens = line.split("\"");
-        String stage = tokens[1]; 
-        names.add(stage)
-      }
-    }
-  }
-  return names
 }

@@ -74,18 +74,25 @@ class Slack {
 
   }
 
-  def sendStageRunning(channel, name, ts) {
-    def stage = [[
+  def sendStageRunning(channel, name, ts, stageNumber, pipelineSize) {
+    def attachments = []
+    for (int i = 0; i < stageNumber; i++)
+      attach.add(messages[1].attachments[i])
+    def stage = [
       color: "#cccc00",
       "author_name": "${name}: running",
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/pulsating-circle.gif?raw=true"
-    ]]
+    ]
+    attachments.add(stage)
+    for (int i = stageNumber+1; i < pipelineSize; i++)
+      attach.add(messages[1].attachments[i])
+
     def payload = JsonOutput.toJson([
         ts: "${ts}",
         channel: "${channel}",
         username: "Jenkins",
         as_user: true,
-        attachments: stage  
+        attachments: attach
     ])
 
     return payload
