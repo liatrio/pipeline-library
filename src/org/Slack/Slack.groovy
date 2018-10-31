@@ -64,11 +64,6 @@ class Slack {
       attachments.add(messages[1].message.attachments[i])
     def stage = [
       color: "#cccc00",
-      "mrkdwn_in": ["text"],
-      "title": "${name}: running",
-      "pretext": "${name}: running",
-      "text": "## ${name}: running\n### ${name}: running",
-      "footer": "${name}: running",
       "author_name": "${name}: running",
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/pulsating-circle.gif?raw=true"
     ]
