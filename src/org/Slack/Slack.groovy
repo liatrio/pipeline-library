@@ -53,22 +53,6 @@ class Slack {
         attachments: stages
     ])
     payloads.add(stagesMessage)
-    //def stage = []
-    //for (int i = 0; i < body.stageNames.size(); i++){
-    //  def s = [
-    //    color: "primary",
-    //    "author_name": "${body.stageNames[i]}: Not started",
-    //    "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/grey-circle.jpeg?raw=true"
-    //  ]
-    //  stage.add(s)
-    //}
-    //def stageMessage = JsonOutput.toJson([
-    //    channel: "${body.channel}",
-    //    username: "Jenkins",
-    //    as_user: true,
-    //    attachments: stage 
-    //])
-    //payloads.add(stageMessage)
 
     return payloads
 
@@ -77,9 +61,14 @@ class Slack {
   def sendStageRunning(messages, channel, name, ts, stageNumber, pipelineSize) {
     def attachments = []
     for (int i = 0; i < stageNumber; i++)
-      attachments .add(messages[1].message.attachments[i])
+      attachments.add(messages[1].message.attachments[i])
     def stage = [
       color: "#cccc00",
+      "mrkdwn_in": ["text"],
+      "title": "${name}: running",
+      "pretext": "${name}: running",
+      "text": "## ${name}: running\n### ${name}: running",
+      "footer": "${name}: running",
       "author_name": "${name}: running",
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/pulsating-circle.gif?raw=true"
     ]
@@ -98,20 +87,25 @@ class Slack {
     return payload
   }
 
-  def sendStageSuccess(channel, name, ts) {
-    def stage = [[
+  def sendStageSuccess(messages, channel, name, ts, stageNumber, pipelineSize) {
+    def attachments = []
+    for (int i = 0; i < stageNumber; i++)
+      attachments.add(messages[1].message.attachments[i])
+    def stage = [
       color: "#45B254",
       "author_name": "${name}: passed!",
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/check-circle.png?raw=true"
-    ]]
+    ]
+    attachments.add(stage)
+    for (int i = stageNumber+1; i < pipelineSize; i++)
+      attachments.add(messages[1].message.attachments[i])
     def payload = JsonOutput.toJson([
         ts: "${ts}",
         channel: "${channel}",
         username: "Jenkins",
         as_user: true,
-        attachments: stage  
+        attachments: attachments
     ])
-
     return payload
   }
   def sendPipelineFailure(channel, name, ts, log) {
