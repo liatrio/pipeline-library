@@ -74,10 +74,10 @@ class Slack {
 
   }
 
-  def sendStageRunning(channel, name, ts, stageNumber, pipelineSize) {
+  def sendStageRunning(messages, channel, name, ts, stageNumber, pipelineSize) {
     def attachments = []
     for (int i = 0; i < stageNumber; i++)
-      attach.add(messages[1].attachments[i])
+      attachments .add(messages[1].message.attachments[i])
     def stage = [
       color: "#cccc00",
       "author_name": "${name}: running",
@@ -85,14 +85,14 @@ class Slack {
     ]
     attachments.add(stage)
     for (int i = stageNumber+1; i < pipelineSize; i++)
-      attach.add(messages[1].attachments[i])
+      attachments.add(messages[1].message.attachments[i])
 
     def payload = JsonOutput.toJson([
         ts: "${ts}",
         channel: "${channel}",
         username: "Jenkins",
         as_user: true,
-        attachments: attach
+        attachments: attachments
     ])
 
     return payload
