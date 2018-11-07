@@ -3,7 +3,7 @@ import org.Slack.Slack
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
 
-def call(err, messages) {
+def call(err, message) {
   Slack slack = new Slack()
   def jenkinsfile = readFile file: "Jenkinsfile"
   def stageNames = getStageNames(jenkinsfile)
@@ -11,7 +11,7 @@ def call(err, messages) {
 
   for (int i = 0; i < stageNames.size(); i++){
     if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
-      def payload = slack.sendPipelineFailure("${env.SLACK_ROOM}", stageNames[i], messages[i+1].ts, err)
+      def payload = slack.sendPipelineFailure("${env.SLACK_ROOM}", stageNames[i], message.ts, err)
       sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
       //def response = httpRequest customHeaders: [
       //  [ name: 'Authorization', value: "Bearer ${env.SLACK_TOKEN}" ]

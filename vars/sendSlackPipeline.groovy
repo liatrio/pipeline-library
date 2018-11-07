@@ -12,28 +12,21 @@ def call() {
   def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
   def author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
   def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim() 
-  def messages = []
-  def messagesJSON = []
   
-  def payloads = slack.sendPipelineInfo([
-                  slackURL: "${env.SLACK_WEBHOOK_URL}",
-                  jobName: "${env.JOB_NAME}",
-                  stageNames: stageNames,
-                  buildNumber: "${env.BUILD_NUMBER}",
-                  branch: "${env.BRANCH_NAME}",
-                  title_link: "${env.BUILD_URL}",
-                  author: "${author}",
-                  message: "${message}",
-                  channel: "${env.SLACK_ROOM}"
-                ])
-  for (int i = 0; i < payloads.size(); i++){
-    messages.add(sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payloads[i]}\' ${env.SLACK_WEBHOOK_URL}/api/chat.postMessage").trim())
-  }
-  for (int i = 0; i < messages.size(); i++){
-    def json = readJSON text: messages[i]
-    messagesJSON.add(json)
-  }
-  return messagesJSON
+  def slackMessage = slack.sendPipelineInfo([
+      slackURL: "${env.SLACK_WEBHOOK_URL}",
+      jobName: "${env.JOB_NAME}",
+      stageNames: stageNames,
+      buildNumber: "${env.BUILD_NUMBER}",
+      branch: "${env.BRANCH_NAME}",
+      title_link: "${env.BUILD_URL}",
+      author: "${author}",
+      message: "${message}",
+      channel: "${env.SLACK_ROOM}"
+    ])
+  def response = sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${slackMessage}\' ${env.SLACK_WEBHOOK_URL}/api/chat.postMessage").trim()
+  def responseJSON = readJSON text: response  
+  return responseJSON 
 }
 
 def getStageNames(jenkinsfile){
