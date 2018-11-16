@@ -3,45 +3,19 @@ import org.Slack.Slack
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
 
-def call(err, message) {
+def call(err, Message) {
   Slack slack = new Slack()
-  def jenkinsfile = readFile file: "Jenkinsfile"
-  def stageNames = getStageNames(jenkinsfile)
 
-
-  for (int i = 0; i < stageNames.size(); i++){
-    if ("${stageNames[i]}" == "${env.STAGE_NAME}"){
-      def payload = slack.sendPipelineFailure("${env.SLACK_ROOM}", stageNames[i], message.ts, err)
-      sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
-      //def response = httpRequest customHeaders: [
-      //  [ name: 'Authorization', value: "Bearer ${env.SLACK_TOKEN}" ]
-      //], contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: payload, url: "${env.SLACK_WEBHOOK_URL}/api/chat.update"
+  Message.message.attachments.eachWithIndex { attachment, index ->
+    if (attachment.author_name != '' && attachment.author_name != null){
+      def name = attachment.author_name.replaceAll(": running", "")
+      if ("${name}" == "${env.STAGE_NAME}"){
+        def payload = slack.sendPipelineFailure(Message, "${env.SLACK_ROOM}", name, Message.ts, index, Message.message.attachments.size(), err)
+        def m = sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
+        def json = readJSON text: m
+        Message = json
+      }
     }
   }
 
 }
-
-def getStageNames(jenkinsfile){
-
-  def names = []
-  def lines = jenkinsfile.readLines()
-
-  for (int i = 0; i < lines.size(); i++){
-    def line = lines[i]
-    if (line.trim().size() == 0){}
-    else {
-      if (line.contains("stage(\'")){
-        String [] tokens = line.split("\'");
-        String stage = tokens[1]; 
-        names.add(stage)
-      }
-      else if (line.contains("stage(\"")){
-        String [] tokens = line.split("\"");
-        String stage = tokens[1]; 
-        names.add(stage)
-      }
-    }
-  }
-  return names
-}
-

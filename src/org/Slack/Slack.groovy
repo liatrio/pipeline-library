@@ -106,20 +106,26 @@ class Slack {
     ])
     return payload
   }
-  def sendPipelineFailure(channel, name, ts, log) {
-    def stage = [[
+  def sendPipelineFailure(Message, channel, name, ts, stageNumber, pipelineSize, log) {
+    def attachments = []
+    for (int i = 0; i < stageNumber; i++)
+      attachments.add(Message.message.attachments[i])
+    def stage = [
       color: "danger",
       "author_name": "${name}: failed",
       "mrkdwn_in": ["text"],
       "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/red-circle.png?raw=true",
       "text": "```${log}```"
-    ]]
+    ]
+    attachments.add(stage)
+    for (int i = stageNumber+1; i < pipelineSize; i++)
+      attachments.add(Message.message.attachments[i])
     def payload = JsonOutput.toJson([
         ts: "${ts}",
         channel: "${channel}",
         username: "Jenkins",
         as_user: true,
-        attachments: stage  
+        attachments: attachments  
     ])
 
     return payload
