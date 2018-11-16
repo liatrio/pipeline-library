@@ -3,7 +3,7 @@ import org.Slack.Slack
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
 
-def call(Message) {
+def call(def Message) {
   Slack slack = new Slack()
 
   Message.message.attachments.eachWithIndex { attachment, index ->

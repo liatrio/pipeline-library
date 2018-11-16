@@ -74,16 +74,27 @@ class Slack {
     return payload
   }
 
-  def sendStageSuccess(Message, channel, name, ts, stageNumber, pipelineSize) {
+  def sendStageSuccess(Message, channel, name, ts, stageNumber, pipelineSize, String s = null) {
     def attachments = []
     for (int i = 0; i < stageNumber; i++)
       attachments.add(Message.message.attachments[i])
-    def stage = [
-      color: "#45B254",
-      "author_name": "${name}: passed!",
-      "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/check-circle.png?raw=true"
-    ]
-    attachments.add(stage)
+
+    if (s == null){
+      def stage = [
+        color: "#45B254",
+        "author_name": "${name}: passed!",
+        "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/check-circle.png?raw=true"
+      ]
+      attachments.add(stage)
+    }
+    else {
+      def stage = [
+        color: "#45B254",
+        "author_name": "${name}: ${s}",
+        "author_icon": "https://github.com/liatrio/pipeline-library/blob/rich-slack/resources/check-circle.png?raw=true"
+      ]
+      attachments.add(stage)
+    }
     for (int i = stageNumber+1; i < pipelineSize; i++)
       attachments.add(Message.message.attachments[i])
     def payload = JsonOutput.toJson([
