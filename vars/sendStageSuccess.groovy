@@ -17,4 +17,5 @@ def call(Message) {
       }
     }
   }
+  return Message
 }

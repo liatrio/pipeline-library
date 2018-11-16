@@ -13,10 +13,10 @@ def call(Message) {
         def payload = slack.sendStageRunning(Message, "${env.SLACK_ROOM}", name, Message.ts, index, Message.message.attachments.size())
         def m = sh(returnStdout: true, script: "curl --silent -X POST -H 'Authorization: Bearer ${env.SLACK_TOKEN}' -H \"Content-Type: application/json\" --data \'${payload}\' ${env.SLACK_WEBHOOK_URL}/api/chat.update").trim() 
         def json = readJSON text: m
-        echo m
         Message = json
       }
     }
   }
 
+  return Message
 }
