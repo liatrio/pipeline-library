@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 
 def call(mavenParams) {
-
     def goals = mavenParams.goals ? mavenParams.goals : 'clean install'
     configFileProvider([configFile(fileId: 'standard', variable: 'MAVEN_SETTINGS')]){
     	withCredentials([usernamePassword(credentialsId: 'artfactory', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
