@@ -1,5 +1,5 @@
 def call(Map mavenParams){
-    docker.image("maven:3.0.5").inside('') {
+    docker.image("maven:3.5.0").inside('') {
     	if (!mavenParams.goals) {
     		mavenParams.build = [:]
             if(env.GIT_BRANCH.endsWith(env.primaryBranch)){
