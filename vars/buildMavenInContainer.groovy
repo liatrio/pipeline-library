@@ -16,5 +16,5 @@ def call(Map mavenParams){
         env.ARTIFACT =  pom.artifactId
         env.PACKAGING = pom.packaging
         env.DOCKER_TAG = "${pom.version}-${env.BUILD_ID}"
-	}
+    }
 }
