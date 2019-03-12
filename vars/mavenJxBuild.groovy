@@ -1,6 +1,6 @@
 #!/bin/env groovy
 def call(params) {
-
+    if(!params) params = [:]
     def appVersion = params.get("version","")
 
     container('maven') {
