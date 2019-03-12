@@ -17,6 +17,6 @@ def call(params) {
 //        sh "jx step tag --version ${appVersion}"
 
         sh "skaffold build -f skaffold.yaml"
-        sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
+        sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:${appVersion}"
     }
 }
