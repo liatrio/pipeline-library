@@ -14,6 +14,7 @@ def call(params) {
         sh "export VERSION=${appVersion}"
         sh "mvn clean install"
         sh "skaffold version"
+        sh "jx step tag --version \$(cat VERSION)"
 
         sh "skaffold build -f skaffold.yaml"
         sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
