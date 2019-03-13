@@ -8,10 +8,9 @@ def call(params) {
             sh "mvn versions:set -DnewVersion=${appVersion}"
         } else {
             def pom = readMavenPom file: 'pom.xml'
-            appVersion = pom.version
+            appVersion = pom.version.split("-")[0] + env.BUILD_NUMBER
             // set environment variables
         }
-//        sh "export VERSION=${appVersion}"
         env.VERSION = appVersion
         sh "mvn clean install"
         sh "skaffold version"
