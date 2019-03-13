@@ -1,7 +1,7 @@
 def call(currentBuild) {
-    def completedTimeStamp = currentBuild.getTimeInMillis()
+    long completedTimeStamp = currentBuild.getTimeInMillis()
 
-    def prevTimeStamp = getTimeOfFailedBuild(currentBuild)
+    long prevTimeStamp = getTimeOfFailedBuild(currentBuild)
     echo "Timestamp of first failed build was: ${prevTimeStamp}"
     return (completedTimeStamp - prevTimeStamp)/1000
 
@@ -10,11 +10,12 @@ def call(currentBuild) {
 
 
 @NonCPS
-def getTimeOfFailedBuild(currentBuild) {
+long getTimeOfFailedBuild(currentBuild) {
     def build = currentBuild //current build is fixed
 
     while(build.id > 1 && build.getPreviousBuild().getResult() != 'SUCCESS') {
         build = build.getPreviousBuild()
     }
+    println "build that failed timestamp ${build.getTimeInMillis()}"
     return build.getTimeInMillis()
 }
