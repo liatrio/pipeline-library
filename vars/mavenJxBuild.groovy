@@ -14,7 +14,9 @@ def call(params) {
         env.VERSION = appVersion
         sh "mvn clean install"
         sh "skaffold version"
-        sh "jx step tag --version ${appVersion}"
+
+        if(env.BRANCH_NAME == 'master')
+            sh "jx step tag --version ${appVersion}"
 
         sh "skaffold build -f skaffold.yaml"
         sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
