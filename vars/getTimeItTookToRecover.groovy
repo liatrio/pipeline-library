@@ -1,11 +1,10 @@
-def call(currentBuild) {
+def call(currentBuild, String unit = "MINUTES") {
+
+    def divisor = ["HOURS": 360000, "MINUTES": 60000, "SECONDS": 1000 , "MILLISECONDS": 1]
     long completedTimeStamp = currentBuild.getTimeInMillis()
-
     long prevTimeStamp = getTimeOfFailedBuild(currentBuild)
-//    long prevTimeStamp = 1552511508015
-    println "Timestamp of first failed build was: ${prevTimeStamp.toString()}"
-    return (completedTimeStamp - prevTimeStamp)/60000
 
+    return (completedTimeStamp - prevTimeStamp) / divisor[unit]
 }
 
 
