@@ -1,9 +1,9 @@
 def call(currentBuild) {
     def completedTimeStamp = currentBuild.getTimeInMillis()
 
-//    def prevTimeStamp = getTimeOfFailedBuild(currentBuild)
+    def prevTimeStamp = getTimeOfFailedBuild(currentBuild)
     echo "Timestamp of first failed build was: ${prevTimeStamp}"
-//    return (completedTimeStamp - prevTimeStamp)/1000
+    return (completedTimeStamp - prevTimeStamp)/1000
 
 }
 
