@@ -14,9 +14,9 @@ def call(currentBuild) {
 long getTimeOfFailedBuild(currentBuild) {
     def build = currentBuild //current build is fixed
 
-//    while(build.id > 1 && build.getPreviousBuild().getResult() != 'SUCCESS') {
-//        build = build.getPreviousBuild()
-//    }
+    while(build.getNumber() > 1 && build.getPreviousBuild().getResult() != 'SUCCESS') {
+        build = build.getPreviousBuild()
+    }
     println "build that failed timestamp ${build.getTimeInMillis()}"
     return build.getTimeInMillis()
 }
