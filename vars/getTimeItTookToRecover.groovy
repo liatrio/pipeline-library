@@ -3,7 +3,8 @@ def call(currentBuild, String unit = "MILLISECONDS") {
     def divisor = ["HOURS": 360000, "MINUTES": 60000, "SECONDS": 1000 , "MILLISECONDS": 1]
     long completedTimeStamp = currentBuild.getTimeInMillis()
     long prevTimeStamp = getTimeOfFailedBuild(currentBuild)
-    env.recoveryTime = completedTimeStamp - prevTimeStamp
+    def recoveryTime = completedTimeStamp - prevTimeStamp
+    sh "export RECOVERY_TIME=${recoveryTime}"
     return (completedTimeStamp - prevTimeStamp) / divisor[unit]
 }
 
