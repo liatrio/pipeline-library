@@ -4,7 +4,7 @@ def call(params) {
     def appVersion = params.get("version","")
 
     container('maven') {
-        if (params.version) {
+        if (appVersion) {
             sh "mvn versions:set -DnewVersion=${appVersion}"
         } else {
             def pom = readMavenPom file: 'pom.xml'
@@ -17,6 +17,6 @@ def call(params) {
 //        sh "jx step tag --version ${appVersion}"
 
         sh "skaffold build -f skaffold.yaml"
-        sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:${appVersion}"
+//        sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:${appVersion}"
     }
 }
