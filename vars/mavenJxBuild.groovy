@@ -18,5 +18,11 @@ def call(params) {
 
         sh "skaffold build -f skaffold.yaml"
         sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
+        if(env.BRANCH_NAME.contains("PR")) {
+            dir('charts/preview') {
+                sh "make preview"
+                sh "jx preview --app $APP_NAME --dir ../.."
+            }
+        }
     }
 }
