@@ -1,5 +1,4 @@
-def call(params) {
-    def currentBuild = params.currentBuild
+def call(currentBuild) {
     def completedTimeStamp = currentBuild.getTimeInMillis()
 
     def prevTimeStamp = getTimeOfFailedBuild(currentBuild)
