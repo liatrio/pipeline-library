@@ -11,7 +11,8 @@ def call(params) {
             appVersion = pom.version
             // set environment variables
         }
-        sh "export VERSION=${appVersion}"
+//        sh "export VERSION=${appVersion}"
+        env.VERSION = appVersion
         sh "mvn clean install"
         sh "skaffold version"
 //        sh "jx step tag --version ${appVersion}"
