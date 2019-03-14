@@ -4,19 +4,19 @@ def call(currentBuild, String unit = "MILLISECONDS") {
     long completedTimeStamp = currentBuild.getTimeInMillis()
     long prevTimeStamp = getTimeOfFailedBuild(currentBuild)
     recoveryTime = completedTimeStamp - prevTimeStamp
-//    logStashObject(recoveryTime: recoveryTime  )
-    return (completedTimeStamp - prevTimeStamp) / divisor[unit]
+//    if( recoveryTime  )
+//        logStashObject(recoveryTime: recoveryTime  )
+    return recoveryTime / divisor[unit]
 }
-
-
 
 @NonCPS
 long getTimeOfFailedBuild(currentBuild) {
-    def build = currentBuild //current build is fixed
-
-    while(build.getNumber() > 1 && build.getPreviousBuild().getResult() != 'SUCCESS') {
+    def build = currentBuild.getPreviousBuild() //start looking at previous build
+    while(build.getNumber() > 1 && build.getResult() != 'FAILURE') {
         build = build.getPreviousBuild()
     }
-    println "build that failed first ${build.getNumber()}"
+    if( build.getNumber() == 1 && build.getResult() == 'SUCCESS')
+        return 0
+    println "Last failed build was ${build.getNumber()}"
     return build.getTimeInMillis()
 }
