@@ -4,7 +4,7 @@ def call(String unit = "MILLISECONDS") {
     long completedTimeStamp = currentBuild.getTimeInMillis()
     long prevTimeStamp = getTimeOfFailedBuild(currentBuild)
     recoveryTime = completedTimeStamp - prevTimeStamp
-    echo "RecoveryTime: ${recoveryTime}"
+    echo "last failed build was: ${recoveryTime} ago "
     sendBuildEvent(eventType:'state-change', state: 'unhealthy', priorDuration: recoveryTime  )
     return recoveryTime / divisor[unit]
 }
