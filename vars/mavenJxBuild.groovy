@@ -11,7 +11,6 @@ def call(params) {
         } else {
             def pom = readMavenPom file: 'pom.xml'
             appVersion = pom.version.split("-")[0] + "-${BUILD_NUMBER}"
-            // set environment variables
         }
         env.VERSION = appVersion
         sh "mvn clean install"
@@ -30,7 +29,6 @@ def call(params) {
             dir('charts/preview') {
                 sh "make preview"
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
-                sh "ls"
                 def environmentInfo = readFile 'previewEnvironment.txt'
                 env.APP_URL = getLastLine(environmentInfo) - "Preview application is now available at: "
             }
