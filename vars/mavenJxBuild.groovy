@@ -32,7 +32,7 @@ def call(params) {
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
                 env.APP_URL = new File('previewEnvironment.txt').readLines()[-1] - "Preview application is now available at: "
             }
+            echo "url to sample app is: ${env.APP_URL}"
         }
-        echo "url to sample app is: ${env.APP_URL}"
     }
 }
