@@ -12,7 +12,7 @@ def call(currentBuild, String unit = "MILLISECONDS") {
 @NonCPS
 long getTimeOfFailedBuild(currentBuild) {
     def build = currentBuild.getPreviousBuild() //start looking at previous build
-    while(build.getNumber() > 1 && build.getPreviousBuild().getResult() != 'FAILURE') {
+    while(build.getNumber() > 1 && build.getResult() != 'FAILURE') {
         build = build.getPreviousBuild()
     }
     if( build.getNumber() == 1 && build.getResult() == 'SUCCESS')
