@@ -2,8 +2,9 @@
 def call(params) {
     if(!params) params = [:]
     def appVersion = params.get("version","")
-
+//TODO:    sendBuildEvent(eventType:'build')
     container('maven') {
+
         if (appVersion) {
             sh "mvn versions:set -DnewVersion=${appVersion}"
         } else {
