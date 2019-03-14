@@ -1,4 +1,4 @@
-def call(currentBuild, String unit = "MILLISECONDS") {
+def call(String unit = "MILLISECONDS") {
 
 
     def divisor = ["HOURS": 360000, "MINUTES": 60000, "SECONDS": 1000 , "MILLISECONDS": 1]
