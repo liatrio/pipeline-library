@@ -4,8 +4,8 @@ def call(currentBuild, String unit = "MILLISECONDS") {
     long completedTimeStamp = currentBuild.getTimeInMillis()
     long prevTimeStamp = getTimeOfFailedBuild(currentBuild)
     recoveryTime = completedTimeStamp - prevTimeStamp
-    if( recoveryTime  )
-        logStashObject(recoveryTime: recoveryTime  )
+//    if( recoveryTime  )
+//        logStashObject(recoveryTime: recoveryTime  )
     return recoveryTime / divisor[unit]
 }
 
