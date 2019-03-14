@@ -30,6 +30,7 @@ def call(params) {
             dir('charts/preview') {
                 sh "make preview"
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
+                sh "ls"
                 env.APP_URL = new File('previewEnvironment.txt').readLines()[-1] - "Preview application is now available at: "
             }
             echo "url to sample app is: ${env.APP_URL}"
