@@ -32,7 +32,8 @@ def call(params) {
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
                 sh "ls"
                 def environmentInfo = readFile 'previewEnvironment.txt'
-                println environmentInfo
+                println environmentInfo.getClass()
+                println environmentInfo.getType()
                 println "boom ${environmentInfo[-1]}"
                 env.APP_URL = environmentInfo.readLines()[-1] - "Preview application is now available at: "
             }
