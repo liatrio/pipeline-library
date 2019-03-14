@@ -1,4 +1,4 @@
-def call (requestBody) {
+def call (requestParams) {
 /*
     def requestBody = [
           "teamName": ${teamName},
@@ -9,12 +9,14 @@ def call (requestBody) {
           "priorDuration": 16343
     ]
  */
-    requestBody.teamName = env.TEAM_NAME ? env.TEAM_NAME : env.ORG
-    requestBody.appName = env.APP_NAME
-    requestBody.branch = env.BRANCH_NAME
+    requestParams.teamName = env.TEAM_NAME ? env.TEAM_NAME : env.ORG
+    requestParams.appName = env.APP_NAME
+    requestParams.branch = env.BRANCH_NAME
+
+    def requestBody = JsonOutput.toJson(requestParams)
     def url = env.elasticUrl ? env.elasticUrl : "localhost:9200"
 
-    def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: requestBody, url: url
+    def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: requestParams, url: url
     println('Status: ' + response.status)
     println('Response: ' + response.content)
 }
