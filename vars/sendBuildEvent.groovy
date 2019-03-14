@@ -1,6 +1,6 @@
 import groovy.json.JsonOutput
 
-def call (requestParams) {
+def call(requestParams) {
 /*
     def requestBody = [
           "teamName": ${teamName},
