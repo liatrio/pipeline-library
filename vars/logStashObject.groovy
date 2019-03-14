@@ -2,13 +2,13 @@ def call (params) {
 
     def requestBody = """
          {
-              "team-name": 'team stein',
-              "app-name" : 'appStein',
-              "event-name": “state-change”,
-               “branch”: “master”,
-               “state”: “healthy”,
-               “prior-duration”: 16343
-            }
+          "team-name": "team stein",
+          "app-name": "appStein",
+          "event-name": "state-change",
+          "branch": "master",
+          "state": "healthy",
+          "prior-duration": 16343
+        }
 
     """
 
