@@ -15,8 +15,6 @@ long getTimeOfFailedBuild(currentBuild) {
     while(build.getNumber() > 1 && build.getResult() != 'FAILURE') {
         build = build.getPreviousBuild()
     }
-    if( build.getNumber() == 1 && build.getResult() == 'SUCCESS')
-        return 0
     println "Last failed build was ${build.getNumber()}"
     return build.getTimeInMillis()
 }
