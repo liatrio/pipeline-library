@@ -32,6 +32,7 @@ def call(params) {
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
                 sh "ls"
                 def environmentInfo = readFile 'previewEnvironment.txt'
+                println getLastLine(environmentInfo)
                 println environmentInfo.getClass()
                 println environmentInfo.getType()
                 println "boom ${environmentInfo[-1]}"
@@ -40,4 +41,10 @@ def call(params) {
             echo "url to sample app is: ${env.APP_URL}"
         }
     }
+}
+
+@NonCPS
+def getLastLine(environmentInfo) {
+    def fileLines = environmentInfo.split("\n")
+    return fileLines[-1]
 }
