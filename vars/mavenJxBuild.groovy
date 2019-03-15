@@ -29,17 +29,9 @@ def call(params) {
             dir('charts/preview') {
                 sh "make preview"
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
-                sh'jx get previews -c'
-                def environmentInfo = readFile 'previewEnvironment.txt'
-                env.APP_URL = getLastLine(environmentInfo) - "Preview application is now available at: "
+                sh 'export APP_URL=jx get previews -c'
             }
             echo "url to sample app is: ${env.APP_URL}"
         }
     }
-}
-
-@NonCPS
-def getLastLine(environmentInfo) {
-    def fileLines = environmentInfo.split("\n")
-    return fileLines[-1]
 }
