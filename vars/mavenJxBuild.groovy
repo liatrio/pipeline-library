@@ -28,7 +28,7 @@ def call(params) {
         if (env.BRANCH_NAME.contains("PR")) {
             dir('charts/preview') {
                 sh "make preview"
-                sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
+                sh "jx preview --app $APP_NAME --dir ../.."
                 env.APP_URL = sh returnStdout: true, script: 'jx get previews -c'
             }
             echo "url to sample app is: ${env.APP_URL}"
