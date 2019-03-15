@@ -29,6 +29,7 @@ def call(params) {
             dir('charts/preview') {
                 sh "make preview"
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
+                sh'jx get previews -c'
                 def environmentInfo = readFile 'previewEnvironment.txt'
                 env.APP_URL = getLastLine(environmentInfo) - "Preview application is now available at: "
             }
