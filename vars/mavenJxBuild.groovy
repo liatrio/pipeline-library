@@ -5,15 +5,15 @@ def call(params) {
     def appVersion = params.get("version", "")
     sendBuildEvent(eventType: 'build')
     container('maven') {
-
+        def pom = readMavenPom file: 'pom.xml'
         if (appVersion) {
             sh "mvn versions:set -DnewVersion=${appVersion}"
         } else {
-            def pom = readMavenPom file: 'pom.xml'
             appVersion = pom.version.split("-")[0] + "-${BUILD_NUMBER}"
-            // set environment variables
         }
         env.VERSION = appVersion
+        env.APP_NAME = pom.artifactId
+
         sh "mvn clean install"
         sh "skaffold version"
 
@@ -30,7 +30,9 @@ def call(params) {
             dir('charts/preview') {
                 sh "make preview"
                 sh "jx preview --app $APP_NAME --dir ../.."
+                env.APP_URL = sh returnStdout: true, script: 'jx get previews -c'
             }
+            echo "url to sample app is: ${env.APP_URL}"
         }
     }
 }
