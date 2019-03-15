@@ -29,7 +29,8 @@ def call(params) {
             dir('charts/preview') {
                 sh "make preview"
                 sh "jx preview --app $APP_NAME --dir ../.. > previewEnvironment.txt"
-                sh 'export APP_URL=jx get previews -c'
+                sh 'URL=jx get previews -c'
+                sh 'export APP_URL=$URL'
             }
             echo "url to sample app is: ${env.APP_URL}"
         }
