@@ -13,6 +13,7 @@ def call(params) {
         }
         env.VERSION = appVersion
         env.APP_NAME = pom.artifactId
+        env.GROUP_ID = pom.groupId
 
         sh "mvn clean install"
         sh "skaffold version"
