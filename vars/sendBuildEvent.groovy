@@ -21,8 +21,6 @@ def call(requestParams) {
     def requestBody = JsonOutput.toJson(requestParams)
     def url = env.logstashUrl ? env.logstashUrl : "localhost:9000"
 
-    println('JSON Obj: ' + requestBody)
-
     def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: requestBody, url: url
     println('Status: ' + response.status)
     println('Response: ' + response.content)
