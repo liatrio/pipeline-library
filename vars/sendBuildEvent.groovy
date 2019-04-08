@@ -19,7 +19,7 @@ def call(requestParams) {
     requestParams.gitCommit = env.GIT_COMMIT
     
     def requestBody = JsonOutput.toJson(requestParams)
-    def url = env.logstashUrl ? env.logstashUrl : "localhost:9000"
+    def url = env.elasticUrl ? env.elasticUrl : "localhost:9000"
 
     def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: requestBody, url: url
     println('Status: ' + response.status)
