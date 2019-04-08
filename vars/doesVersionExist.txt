@@ -1,7 +1,0 @@
-<h3>Checks if a given version of an artifact exists</h3>
-<h4>Parameters:</h4>
-<ul>
-<li><b>repository:</b> Repository to check in
-<li><b>image:</b> Image to check the version of
-<li><b>tagName:</b> Tag to check for
-</ul>

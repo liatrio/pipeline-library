@@ -1,6 +1,0 @@
-<h3>Gets the latest version of an image from a repository</h3>
-<h4>Parameters:</h4>
-<ul>
-<li><b>repository:</b> Repository to check in
-<li><b>image:</b> Image to get the latest version of
-</ul>

@@ -1,2 +1,0 @@
-<h3>Gets a Jira issue</h3>
-No Parameters
