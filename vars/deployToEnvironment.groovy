@@ -5,4 +5,7 @@ def call(env, config) {
   else if (config.stages.deploy.platform.toLowerCase() == "aem"){
     deployToAEM(config)
   }
+  else if (config.stages.deploy.platform.toLowerCase() == "aks"){
+    deployToAks(env, config)
+  }
 }
