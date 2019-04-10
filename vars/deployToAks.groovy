@@ -4,6 +4,8 @@ def call(env, config) {
     sh """
       kubectl config --kubeconfig=${kubeConfig} use-context aksCluster
       kubectl --kubeconfig=${kubeConfig} get pods
+      kubectl --kubeconfig=${kubeConfig} version
+      helm --kubeconfig=${kubeConfig} version
     """
   }
   //sh """
