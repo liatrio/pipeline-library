@@ -1,20 +1,20 @@
-def call(env, config) {
+def call(env, helmName, helmChoice, helmValues) {
+
 
   withCredentials([file(credentialsId: 'kubeConfig', variable: 'kubeConfig')]) {
+    def kubeCmd = "kubectl --kubeconfig=${kubeConfig}"
+    def helmCmd = "helm --kubeconfig=${kubeConfig}"
+
     sh """
-      kubectl config --kubeconfig=${kubeConfig} use-context aksCluster
-      kubectl --kubeconfig=${kubeConfig} get pods
-      kubectl --kubeconfig=${kubeConfig} version
-      helm --kubeconfig=${kubeConfig} version
+      ${kubeCmd} config use-context ${env}
+      ${helmCmd} init
     """
+    if (helmChoice == "install") {
+      sh "${helmCmd} install liatrio-jenkins/. --name ${helmName} -f ${helmValues}"
+    }
+    else if (helmChoice == "delete") {
+      sh "${helmCmd} delete --purge ${helmName}"
+    }
   }
-  //sh """
-  //  sh "kubectl config set-cluster ${env} --server=toolchain-jenkins-11073318.hcp.eastus.azmk8s.io"
-  //  sh "kubectl config --kubeconfig=config-demo set-credentials jenkins --client-certificate=${FAKE_CERT_FILE} --client-key=fake-key-seefile"
-  //  kubectl config --kubeconfig=config-demo set-cluster ${env} --server=https://<aks_ip> --certificate-authority=<fake-ca-file>
-  //  kubectl config --kubeconfig=config-demo set-context ${env} --cluster=<still needed> --namespace=storage --user=developer
-  //  kubectl config --kubeconfig=config-demo use-context ${env}
-  //  kubectl --namespace=${env} apply -f kube/.
-  //"""
 }
 
