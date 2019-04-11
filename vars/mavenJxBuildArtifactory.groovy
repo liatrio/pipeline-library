@@ -30,7 +30,7 @@ def call(params) {
                     echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
 
                     docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
-                        sh "skaffold deploy -p openshift-online -f skaffold.yaml"
+                        sh "skaffold run -p openshift-online -f skaffold.yaml"
                         //sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
                     }
                 }
