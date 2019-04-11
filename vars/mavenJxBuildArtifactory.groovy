@@ -23,9 +23,24 @@ def call(params) {
             sh "jx step git credentials"
             sh "jx step tag --version ${appVersion}"
         }
-        docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
-            sh "skaffold build -f skaffold.yaml"
-            //sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
+
+        openshift.withCredentials('openshift-liatrio') {
+            openshift.withCluster("${OPENSHIFT_CLUSTER}") {
+                openshift.withProject("${OPENSHIFT_PROJECT}") {
+                    echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
+                        sh "skaffold build -p openshift-online -f skaffold.yaml"
+                        //sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
+                    }
+                }
+            }
+        }
+        openshift.withCredentials('openshift-liatrio') {
+            openshift.withCluster("${OPENSHIFT_CLUSTER}") {
+                openshift.withProject('liatrio') {
+                    echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
+                }
+            }
         }
 //        if (env.BRANCH_NAME.contains("PR")) {
 //            dir('charts/preview') {
