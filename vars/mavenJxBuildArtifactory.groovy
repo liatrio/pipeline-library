@@ -24,12 +24,16 @@ def call(params) {
             sh "jx step tag --version ${appVersion}"
         }
         openshift.logLevel(10)
+        sh "cat ~/.kube/config || true"
         withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-            openshift.withCredentials('openshift-liatrio-sync') {
+            openshift.withCredentials('openshift-liatrio') {
                 openshift.withCluster("${OPENSHIFT_CLUSTER}") {
                     openshift.withProject("${OPENSHIFT_PROJECT}") {
+                        sh "cat ~/.kube/config || true"
                         openshift.logLevel(10)
                         echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
+                        def result = openshift.raw( 'status', '-v' )
+                        echo "Cluster status: ${result.out}"
 
                         // Create a Selector capable of selecting all service accounts in mycluster's default project
                         def saSelector = openshift.selector('serviceaccount')
