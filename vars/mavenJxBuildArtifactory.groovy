@@ -23,9 +23,9 @@ def call(params) {
             sh "jx step git credentials"
             sh "jx step tag --version ${appVersion}"
         }
-        docker.withRegistry("${DOCKER_REGISTRY}", 'artifactory-takumin') {
+        docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
             sh "skaffold build -f skaffold.yaml"
-            sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
+            //sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
         }
         if (env.BRANCH_NAME.contains("PR")) {
             dir('charts/preview') {
