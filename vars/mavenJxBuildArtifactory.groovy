@@ -23,14 +23,29 @@ def call(params) {
             sh "jx step git credentials"
             sh "jx step tag --version ${appVersion}"
         }
-
-        openshift.withCredentials('openshift-liatrio') {
+        openshift.logLevel(10)
+        openshift.withCredentials('openshift-liatrio-sync') {
             openshift.withCluster("${OPENSHIFT_CLUSTER}") {
                 openshift.withProject("${OPENSHIFT_PROJECT}") {
+                    openshift.logLevel(10)
                     echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
 
+                    // Create a Selector capable of selecting all service accounts in mycluster's default project
+                    def saSelector = openshift.selector( 'serviceaccount' )
+
+                    // Prints `oc describe serviceaccount` to Jenkins console
+                    saSelector.describe()
+
+                    // Selectors also allow you to easily iterate through all objects they currently select.
+                    saSelector.withEach { // The closure body will be executed once for each selected object.
+                        // The 'it' variable will be bound to a Selector which selects a single
+                        // object which is the focus of the iteration.
+                        echo "Service account: ${it.name()} is defined in ${openshift.project()}"
+                    }
+
                     docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
-                        sh "skaffold run -p openshift-online -f skaffold.yaml"
+                        sh "skaffold diagnose  -f skaffold.yaml"
+                        sh "skaffold -v debug run -p openshift-online -f skaffold.yaml"
                         //sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
                     }
                 }
