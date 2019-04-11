@@ -5,13 +5,17 @@ def call(env, teamName, helmChoice) {
     def kubeCmd = "kubectl --kubeconfig=${kubeConfig}"
     def helmCmd = "helm --kubeconfig=${kubeConfig}"
 
-    git branch: 'master', url: 'https://github.com/liatrio/liatrio-jenkins.git'
+    dir('liatrio-jenkins') {
+      git branch: 'dev', url: 'https://github.com/liatrio/liatrio-jenkins.git'
+    }
+
     sh """
       ${kubeCmd} config use-context ${env}
       ${helmCmd} init
+      ${helmCmd} repo update
     """
     if (helmChoice == "install") {
-      sh "${helmCmd} install liatrio-jenkins/. --name ${teamName}-jenkins --set teamName=${teamName} -f credentials.yaml -f jobs.yaml"
+      sh "${helmCmd} install liatrio-jenkins/liatrio-jenkins/. --name ${teamName}-jenkins --set teamName=${teamName} -f credentials.yaml -f jobs.yaml"
     }
     else if (helmChoice == "delete") {
       sh "${helmCmd} delete --purge ${teamName}-jenkins"
