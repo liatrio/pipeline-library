@@ -31,9 +31,9 @@ def call(params) {
 //                sh "oc login ${OPENSHIFT_CLUSTER} -t ${OPENSHIFT_TOKEN}"
 //            }
             sh "cat ~/.kube/config || true"
-            openshift.withCredentials('openshift-liatrio-sync') {
-                openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}") {
-                    openshift.withProject("${OPENSHIFT_PROJECT}") {
+            openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}") {
+                openshift.withProject("${OPENSHIFT_PROJECT}") {
+                    openshift.withCredentials('openshift-login-login') {
                         sh "cat ~/.kube/config || true"
                         openshift.logLevel(10)
                         echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
