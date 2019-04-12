@@ -33,10 +33,14 @@ def call(params) {
             withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
                 openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}", "${OC_TOKEN}") {
                     openshift.withProject("${OPENSHIFT_PROJECT}") {
+
+                        sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
+
                         sh "cat ~/.kube/config || true"
                         openshift.logLevel(10)
                         echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
-                        def result = openshift.raw('status', '-v')
+
+                        result = openshift.raw('status', '-v')
                         echo "Cluster status: ${result.out}"
 
                         // Create a Selector capable of selecting all service accounts in mycluster's default project
