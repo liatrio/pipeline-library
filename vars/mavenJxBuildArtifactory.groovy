@@ -53,6 +53,10 @@ def call(params) {
                             echo "Service account: ${it.name()} is defined in ${openshift.project()}"
                         }
 
+                        result = openshift.raw('status', '-v')
+                        echo "Cluster status: ${result.out}"
+
+                        sh "helm --debug version"
                         docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
                             sh "skaffold diagnose  -f skaffold.yaml"
                             sh "skaffold -v debug run -p openshift-online -f skaffold.yaml"
