@@ -26,7 +26,6 @@ def call(params) {
                           sh """
                               helm repo add helm "https://artifactory.liatr.io/artifactory/helm" --username $USERNAME --password $PASSWORD
                               helm package --dependency-update --app-version ${env.VERSION} charts/springboot-local
-                              helm package charts/springboot-local
                               """
                         }
                     }
