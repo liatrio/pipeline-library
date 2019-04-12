@@ -21,6 +21,7 @@ def call(params) {
                         echo "Cluster status: ${result.out}"
 
                         sh "helm --debug version"
+                        sh "helm --debug init --client-only"
                         withCredentials([usernamePassword(credentialsId: 'artifactory-takumin', variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                           sh """
                               helm repo add helm "https://artifactory.liatr.io/artifactory/helm" --username $USERNAME --password $PASSWORD
@@ -32,11 +33,11 @@ def call(params) {
                 }
             }
         }
-        withCredentials([string(credentialsId: 'artifactory-takumin', variable: 'CREDS')]) {
+        withCredentials([usernamePassword(credentialsId: 'artifactory-takumin', variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             rtServer (
                 id: "liatrio-artifactory",
                 url: "http://artifactory.liatr.io/artifactory",
-                credentialsId: $CREDS
+                credentialsId: "artifactory-takumin"
             )
             rtUpload (
                 serverId: "liatrio-artifactory",
