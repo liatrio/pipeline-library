@@ -23,11 +23,16 @@ def call(params) {
             sh "jx step git credentials"
             sh "jx step tag --version ${appVersion}"
         }
+        env.SKIP_TLS = true
         openshift.logLevel(10)
         sh "cat ~/.kube/config || true"
         withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-            openshift.withCredentials('openshift-liatrio') {
-                openshift.withCluster("${OPENSHIFT_CLUSTER}") {
+//            withCredentials([string(credentialsId: 'openshift-login-token', variable: 'TOKEN')]) {
+//                sh "oc login ${OPENSHIFT_CLUSTER} -t ${OPENSHIFT_TOKEN}"
+//            }
+            sh "cat ~/.kube/config || true"
+            openshift.withCredentials('openshift-liatrio-sync') {
+                openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}") {
                     openshift.withProject("${OPENSHIFT_PROJECT}") {
                         sh "cat ~/.kube/config || true"
                         openshift.logLevel(10)
