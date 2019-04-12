@@ -6,12 +6,29 @@ def call(params) {
     sendBuildEvent(eventType: 'build')
     container('maven') {
 
+
+        def pom = readMavenPom file: 'pom.xml'
+        if (appVersion) {
+            sh "mvn versions:set -DnewVersion=${appVersion}"
+        } else {
+            appVersion = pom.version.split("-")[0] + "-${BUILD_NUMBER}"
+        }
+        env.VERSION = appVersion
+        env.APP_NAME = pom.artifactId
+        env.GROUP_ID = pom.groupId
+
+        sh "mvn clean install"
+        sh "skaffold version"
+        if (env.BRANCH_NAME == 'master') {
+            sh "git checkout master"
+            sh "git config --global credential.helper store"
+            sh "jx step git credentials"
+            sh "jx step tag --version ${appVersion}"
+        }
+
         openshift.logLevel(10)
         sh "cat ~/.kube/config || true"
         withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-//            withCredentials([string(credentialsId: 'openshift-login-token', variable: 'TOKEN')]) {
-//                sh "oc login ${OPENSHIFT_CLUSTER} -t ${OPENSHIFT_TOKEN}"
-//            }
             sh "cat ~/.kube/config || true"
             withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
                 openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}", "${OC_TOKEN}") {
@@ -45,26 +62,6 @@ def call(params) {
                 }
             }
         }
-
-        def pom = readMavenPom file: 'pom.xml'
-        if (appVersion) {
-            sh "mvn versions:set -DnewVersion=${appVersion}"
-        } else {
-            appVersion = pom.version.split("-")[0] + "-${BUILD_NUMBER}"
-        }
-        env.VERSION = appVersion
-        env.APP_NAME = pom.artifactId
-        env.GROUP_ID = pom.groupId
-
-        sh "mvn clean install"
-        sh "skaffold version"
-        if (env.BRANCH_NAME == 'master') {
-            sh "git checkout master"
-            sh "git config --global credential.helper store"
-            sh "jx step git credentials"
-            sh "jx step tag --version ${appVersion}"
-        }
-
 //        if (env.BRANCH_NAME.contains("PR")) {
 //            dir('charts/preview') {
 //                sh "make preview"
