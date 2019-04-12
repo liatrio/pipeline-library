@@ -25,7 +25,7 @@ def call(params) {
                         withCredentials([usernamePassword(credentialsId: 'artifactory-takumin', variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                           sh """
                               helm repo add helm "https://artifactory.liatr.io/artifactory/helm" --username $USERNAME --password $PASSWORD
-                              helm package --dependency-update --app-version ${env.VERSION} charts/springboot-local
+                              helm package --dependency-update --version ${env.VERSION} --app-version ${env.VERSION} charts/springboot-local
                               """
                         }
                     }
