@@ -33,8 +33,19 @@ def call(params) {
                             sh """
 helm repo add liatrio-artifactory "https://artifactory.liatr.io/artifactory/helm" --username $USERNAME --password $PASSWORD
 helm repo update
-helm install liatrio-artifactory/springboot-local --name ${APP_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}
-                              """
+"""
+                            def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
+                            echo "helm status: ${helm_status_data}"
+                            def helm_status = readJSON text: "${helm_status_data}"
+                            def foundRelease = helm_status.Releases?.collect { it.findResult { it.value == env.APP_NAME } }?.contains(true)?: false
+                            def action = foundRelease? "update" : "install"
+                            echo "Performing helm action: ${action}"
+                            if ( foundRelease ) {
+                                sh "helm upgrade ${APP_NAME} liatrio-artifactory/springboot-local  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                            } else {
+                                sh "helm insttall liatrio-artifactory/springboot-local --name ${APP_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+
+                            }
                         }
                     }
                 }
