@@ -33,7 +33,7 @@ def call(params) {
                             sh """
 helm repo add liatrio-artifactory "https://artifactory.liatr.io/artifactory/helm" --username $USERNAME --password $PASSWORD
 helm repo update
-helm install liatrio-artifactory/springboot-local --name ${APP_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}
+helm install liatrio-artifactory/springboot-local --name ${APP_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}
                               """
                         }
                     }
