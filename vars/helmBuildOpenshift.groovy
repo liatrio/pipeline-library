@@ -44,7 +44,7 @@ def call(params) {
                     """{
                         "files": [
                           {
-                            "pattern": "springboot-local*.tgz",
+                            "pattern": "${CHART_NAME}-${env.VERSION}.tgz",
                             "target": "helm/"
                           }
                        ]
