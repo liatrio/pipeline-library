@@ -41,7 +41,7 @@ def call(params) {
 
                         sh "helm --debug version"
                         docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
-                            sh "skaffold build -p ${SKAFFOLD_PROFILE} -f skaffold.yaml"
+                            sh "skaffold build -v debug -p ${SKAFFOLD_PROFILE} -f skaffold.yaml"
                             //sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
                         }
                     }
