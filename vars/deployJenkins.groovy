@@ -15,7 +15,14 @@ def call(env, teamName, helmChoice) {
       ${helmCmd} repo update
     """
     if (helmChoice == "install") {
-      sh "${helmCmd} install liatrio-jenkins/liatrio-jenkins/. --name ${teamName}-jenkins --set teamName=${teamName} -f credentials.yaml -f jobs.yaml"
+      sh """
+        ${helmCmd} install liatrio-jenkins/liatrio-jenkins/. \
+          --name ${teamName}-jenkins \
+          --set teamName=${teamName} \
+          -f liatrio-jenkins/liatrio-jenkins/podTemplates.yaml \
+          -f credentials.yaml \
+          -f jobs.yaml
+      """
     }
     else if (helmChoice == "delete") {
       sh "${helmCmd} delete --purge ${teamName}-jenkins"
