@@ -1,5 +1,16 @@
 #!/bin/env groovy
+/**
+ * Deploys a helm chart to an OpenShift cluster
 
+ * REQUIRED ENVIRONMENT VARIABLES
+ *   OPENSHIFT_CLUSTER: OpenShift cluster host name
+ *   OPENSHIFT_PROJECT: OpenShift project name
+ *   APP_NAME: Application name
+ *   DEPLOY_NAME: Helm deployment name
+ *   VERSION: Application version
+ *   TILLER_NAMESPACE: Kubernetes namespace to deploy app into
+ *   DOCKER_REGISTRY: Docker registry host name
+ */
 def call(params) {
     if (!params) params = [:]
     container('maven') {
@@ -25,9 +36,9 @@ def call(params) {
                 def action = foundRelease? "update" : "install"
                 echo "Performing helm action: ${action}"
                 if ( foundRelease ) {
-                  sh "helm upgrade ${APP_NAME} liatrio-artifactory/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                  sh "helm upgrade ${DEPLOY_NAME} liatrio-artifactory/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
                 } else {
-                    sh "helm install liatrio-artifactory/${APP_NAME} --name ${APP_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                    sh "helm install liatrio-artifactory/${APP_NAME} --name ${DEPLOY_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
                 }
               }
             }
