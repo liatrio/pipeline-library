@@ -41,9 +41,9 @@ helm repo update
                             def action = foundRelease? "update" : "install"
                             echo "Performing helm action: ${action}"
                             if ( foundRelease ) {
-                                sh "helm upgrade ${APP_NAME} liatrio-artifactory/${CHART_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                                sh "helm upgrade ${CHART_NAME} liatrio-artifactory/${CHART_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
                             } else {
-                                sh "helm install liatrio-artifactory/${CHART_NAME} --name ${APP_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                                sh "helm install liatrio-artifactory/${CHART_NAME} --name ${CHART_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
 
                             }
                         }
