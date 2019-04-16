@@ -19,7 +19,7 @@
        openshift.withCredentials('openshift-login-token') {
          openshift.withProject("${OPENSHIFT_PROJECT}") {
            //sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
-           sh "oc login https://${OPENSHIFT_CLUSTER}"
+           sh "oc status"
            result = openshift.raw('status', '-v')
            echo "Cluster status: ${result.out}"
            sh "helm init --client-only"
