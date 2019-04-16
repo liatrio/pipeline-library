@@ -19,6 +19,8 @@
        openshift.withCredentials('openshift-login-token') {
          openshift.withProject("${OPENSHIFT_PROJECT}") {
            //sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
+           sh "env"
+           sh "cat ~/.kube/config || true"
            sh "oc status"
            result = openshift.raw('status', '-v')
            echo "Cluster status: ${result.out}"
