@@ -18,7 +18,7 @@ def call(params) {
           """{
              "files": [
               {
-                "pattern": "${CHART_NAME}-${env.VERSION}.tgz",
+                "pattern": "${APP_NAME}-${env.VERSION}.tgz",
                 "target": "helm/"
                }
             ]
