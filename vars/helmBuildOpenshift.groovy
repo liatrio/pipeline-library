@@ -10,7 +10,6 @@ def call(params) {
 
 
         withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-            sh "cat ~/.kube/config || true"
             withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
                 openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}", "${OC_TOKEN}") {
                     openshift.withProject("${OPENSHIFT_PROJECT}") {
@@ -20,8 +19,8 @@ def call(params) {
                         def result = openshift.raw('status', '-v')
                         echo "Cluster status: ${result.out}"
 
-                        sh "helm --debug version"
-                        sh "helm --debug init --client-only"
+                        sh "helm version"
+                        sh "helm init --client-only"
                         withCredentials([usernamePassword(credentialsId: 'artifactory-takumin', variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                           sh """
                               helm repo add helm "https://artifactory.liatr.io/artifactory/helm" --username $USERNAME --password $PASSWORD

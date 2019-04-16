@@ -26,10 +26,7 @@ def call(params) {
             sh "jx step tag --version ${appVersion}"
         }
 
-        openshift.logLevel(10)
-        sh "cat ~/.kube/config || true"
         withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-            sh "cat ~/.kube/config || true"
             withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
                 openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}", "${OC_TOKEN}") {
                     openshift.withProject("${OPENSHIFT_PROJECT}") {
@@ -39,10 +36,9 @@ def call(params) {
                         result = openshift.raw('status', '-v')
                         echo "Cluster status: ${result.out}"
 
-                        sh "helm --debug version"
+                        sh "helm version"
                         docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
                             sh "skaffold build -p openshift-online -f skaffold.yaml"
-                            //sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$VERSION"
                         }
                     }
                 }
