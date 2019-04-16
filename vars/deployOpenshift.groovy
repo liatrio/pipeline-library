@@ -14,7 +14,7 @@
  def call(params) {
    if (!params) params = [:]
    withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-     withCredentials([string(credentialsId: params.get("openshift-token", "openshift-token"), variable: 'OC_TOKEN')]) {
+     withCredentials([string(credentialsId: params.get("openshiftToken", "openshift-token"), variable: 'OC_TOKEN')]) {
        sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
        // result = openshift.raw('status', '-v')
        // echo "Cluster status: ${result.out}"
