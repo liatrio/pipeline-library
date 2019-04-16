@@ -14,8 +14,9 @@
  def call(params) {
    if (!params) params = [:]
    withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-     withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
-       openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}", "${OC_TOKEN}") {
+     //withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
+     openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}", "${OC_TOKEN}") {
+       openshift.withCredentials('openshift-login-token') {
          openshift.withProject("${OPENSHIFT_PROJECT}") {
            sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
            result = openshift.raw('status', '-v')
