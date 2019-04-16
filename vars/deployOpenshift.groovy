@@ -2,7 +2,7 @@
 
 def call(params) {
     if (!params) params = [:]
-    sendBuildEvent(eventType: 'deploy')
+//    sendBuildEvent(eventType: 'deploy')
     container('maven') {
 
 
