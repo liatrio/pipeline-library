@@ -37,13 +37,13 @@ helm repo update
                             def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
                             echo "helm status: ${helm_status_data}"
                             def helm_status = readJSON text: "${helm_status_data}"
-                            def foundRelease = helm_status.Releases?.collect { it.findResult { it.value == env.APP_NAME } }?.contains(true)?: false
+                            def foundRelease = helm_status.Releases?.collect { it.findResult { it.value == env.CHART_NAME } }?.contains(true)?: false
                             def action = foundRelease? "update" : "install"
                             echo "Performing helm action: ${action}"
                             if ( foundRelease ) {
-                                sh "helm upgrade ${CHART_NAME} liatrio-artifactory/${CHART_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                                sh "helm upgrade ${CHART_NAME} liatrio-artifactory/${CHART_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${CHART_NAME} --set image.tag=${VERSION}"
                             } else {
-                                sh "helm install liatrio-artifactory/${CHART_NAME} --name ${CHART_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                                sh "helm install liatrio-artifactory/${CHART_NAME} --name ${CHART_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${CHART_NAME} --set image.tag=${VERSION}"
 
                             }
                         }
