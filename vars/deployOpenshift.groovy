@@ -16,8 +16,8 @@
    withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
      withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
        sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
-       result = openshift.raw('status', '-v')
-       echo "Cluster status: ${result.out}"
+       // result = openshift.raw('status', '-v')
+       // echo "Cluster status: ${result.out}"
        sh "helm init --client-only"
        withCredentials([usernamePassword(credentialsId: 'artifactory-takumin', variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
          sh """
