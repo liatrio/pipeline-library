@@ -15,10 +15,11 @@
    if (!params) params = [:]
    withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
      //withCredentials([string(credentialsId: 'openshift-login-token', variable: 'OC_TOKEN')]) {
-     openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}", "${OC_TOKEN}") {
+     openshift.withCluster("insecure://${OPENSHIFT_CLUSTER}"/*, "${OC_TOKEN}"*/) {
        openshift.withCredentials('openshift-login-token') {
          openshift.withProject("${OPENSHIFT_PROJECT}") {
-           sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
+           //sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
+           sh "oc login https://${OPENSHIFT_CLUSTER}"
            result = openshift.raw('status', '-v')
            echo "Cluster status: ${result.out}"
            sh "helm init --client-only"
