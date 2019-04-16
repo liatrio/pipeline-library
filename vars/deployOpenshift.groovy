@@ -10,6 +10,13 @@ def call(params) {
 //        env.APP_NAME = pom.artifactId
 //        env.GROUP_ID = pom.groupId
 
+        // Verify and comply with Helms deployment name standard
+        // release name sample-app-api-ENG-493-joe is not a valid DNS label: a DNS-1123 label must consist of lower case alphanumeric characters or '-', and must start and end with an alphanumeric character (e.g. 'my-name',  or '123-abc', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?')
+        env.DEPLOY_NAME = "${APP_NAME}-${BRANCH_NAME}".toLowerCase()
+        echo "Pre-processed deploy name: ${env.DEPLOY_NAME}"
+        def deployNameEndpoint= "${env.DEPLOY_NAME}".length() < 32? "${env.DEPLOY_NAME}".length() : 32
+        env.DEPLOY_NAME = "${env.DEPLOY_NAME}"[0..deployNameEndpoint-1]
+        echo "Deploy name: ${env.DEPLOY_NAME}"
 
         withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
             sh "cat ~/.kube/config || true"
@@ -37,13 +44,13 @@ helm repo update
                             def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
                             echo "helm status: ${helm_status_data}"
                             def helm_status = readJSON text: "${helm_status_data}"
-                            def foundRelease = helm_status.Releases?.collect { it.findResult { it.value == env.APP_NAME } }?.contains(true)?: false
+                            def foundRelease = helm_status.Releases?.collect { it.findResult { it.value == env.DEPLOY_NAME } }?.contains(true)?: false
                             def action = foundRelease? "update" : "install"
                             echo "Performing helm action: ${action}"
                             if ( foundRelease ) {
-                                sh "helm upgrade ${APP_NAME} liatrio-artifactory/springboot-local  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                                sh "helm upgrade ${env.DEPLOY_NAME} liatrio-artifactory/springboot-local  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
                             } else {
-                                sh "helm insttall liatrio-artifactory/springboot-local --name ${APP_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+                                sh "helm install liatrio-artifactory/springboot-local --name ${env.DEPLOY_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
 
                             }
                         }
