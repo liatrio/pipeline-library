@@ -31,8 +31,10 @@ def call(params) {
       def foundRelease = false
       helm_status.Releases?.each { r ->
         r.each { k, v ->
-          if (k == 'Name' && v == APP_NAME) {
+          echo "${k} -> ${v} : ${DEPLOY_NAME}"
+          if (k == 'Name' && v == DEPLOY_NAME) {
             foundRelease = true
+            echo "match"
           }
         }
       }
