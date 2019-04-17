@@ -13,7 +13,7 @@ def call(params) {
   rtServer (
      id: "liatrio-artifactory",
      url: params.get("helmRepository", "https://artifactory.liatr.io/artifactory/helm"),
-     credentialsId: params.get("helmRepositoryCredentials", "openshift-token"
+     credentialsId: params.get("helmRepositoryCredentials", "openshift-token")
   )
   rtUpload (
     serverId: "liatrio-artifactory",
