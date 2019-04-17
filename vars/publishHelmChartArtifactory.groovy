@@ -12,8 +12,8 @@ def call(params) {
   sh "helm package --dependency-update --version ${VERSION} --app-version ${VERSION} ${CHART_PATH}"
   rtServer (
      id: "liatrio-artifactory",
-     url: "https://artifactory.liatr.io/artifactory",
-     credentialsId: "artifactory-takumin"
+     url: params.get("helmRepository", "https://artifactory.liatr.io/artifactory/helm"),
+     credentialsId: params.get("helmRepositoryCredentials", "openshift-token"
   )
   rtUpload (
     serverId: "liatrio-artifactory",
@@ -21,8 +21,7 @@ def call(params) {
       """{
         "files": [
           {
-            "pattern": "${APP_NAME}-${env.VERSION}.tgz",
-            "target": "helm/"
+            "pattern": "${APP_NAME}-${VERSION}.tgz",
           }
         ]
      }"""
