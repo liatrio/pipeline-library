@@ -28,25 +28,13 @@ def call(params) {
       def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
       echo "helm status: ${helm_status_data}"
       def helm_status = readJSON text: "${helm_status_data}"
-      // def foundRelease = false
-      // helm_status.Releases?.collect { it.Name }
-      // helm_status.Releases?.each { r ->
-      //   r.each { k, v ->
-      //     echo "${k} -> ${v} : ${DEPLOY_NAME}"
-      //     if (k == 'Name' && v == DEPLOY_NAME) {
-      //       foundRelease = true
-      //       echo "match"
-      //     }
-      //   }
-      // }
-        // it.findResult { it.value == env.APP_NAME && it.name == 'Name' } }?.contains(true)?: false
       def action = helm_status.Releases?.collect { it.Name }.contains(DEPLOY_NAME)? "update" : "install"
       echo "Performing helm action: ${action}"
-      // if ( foundRelease ) {
-      //   sh "helm upgrade ${DEPLOY_NAME} liatrio-repository/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
-      // } else {
-      //   sh "helm install liatrio-repository/${APP_NAME} --name ${DEPLOY_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
-      // }
+      if ( foundRelease ) {
+        sh "helm upgrade ${DEPLOY_NAME} liatrio-repository/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+      } else {
+        sh "helm install liatrio-repository/${APP_NAME} --name ${DEPLOY_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+      }
     }
   }
 }
