@@ -16,26 +16,26 @@
  *   helmRepository (https://artifactory.liatr.io/artifactory/helm): Helm repository URL
  *   helmRepositoryCredentials (helm-repository-credentials): Name of Helm credentials
  */
- def call(params) {
-   if (!params) params = [:]
-   withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
-     withCredentials([string(credentialsId: params.get("openshiftToken", "openshift-token"), variable: 'OC_TOKEN')]) {
-       sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
-       sh "helm init --client-only"
-       withCredentials([usernamePassword(credentialsId: params.get("helmRepositoryCredentials", "helm-repository-credentials"), variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-         sh "helm repo add liatrio-repository ${params.get("helmRepository", "https://artifactory.liatr.io/artifactory/helm")} --username $USERNAME --password $PASSWORD"
-       }
-       def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
-       echo "helm status: ${helm_status_data}"
-       def helm_status = readJSON text: "${helm_status_data}"
-       def foundRelease = helm_status.Releases?.collect { it.findResult { it.value == env.APP_NAME } }?.contains(true)?: false
-       def action = foundRelease? "update" : "install"
-       echo "Performing helm action: ${action}"
-       if ( foundRelease ) {
-         sh "helm upgrade ${DEPLOY_NAME} liatrio-repository/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
-         } else {
-           sh "helm install liatrio-repository/${APP_NAME} --name ${DEPLOY_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
-         }
-       }
-     }
-   }
+def call(params) {
+  if (!params) params = [:]
+  withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
+    withCredentials([string(credentialsId: params.get("openshiftToken", "openshift-token"), variable: 'OC_TOKEN')]) {
+      sh "oc login https://${OPENSHIFT_CLUSTER} --token=${OC_TOKEN}"
+      sh "helm init --client-only"
+      withCredentials([usernamePassword(credentialsId: params.get("helmRepositoryCredentials", "helm-repository-credentials"), variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        sh "helm repo add liatrio-repository ${params.get("helmRepository", "https://artifactory.liatr.io/artifactory/helm")} --username $USERNAME --password $PASSWORD"
+      }
+      def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
+      echo "helm status: ${helm_status_data}"
+      def helm_status = readJSON text: "${helm_status_data}"
+      def foundRelease = helm_status.Releases?.collect { it.findResult { it.value == env.APP_NAME } }?.contains(true)?: false
+      def action = foundRelease? "update" : "install"
+      echo "Performing helm action: ${action}"
+      if ( foundRelease ) {
+        sh "helm upgrade ${DEPLOY_NAME} liatrio-repository/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+      } else {
+        sh "helm install liatrio-repository/${APP_NAME} --name ${DEPLOY_NAME} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+      }
+    }
+  }
+}
