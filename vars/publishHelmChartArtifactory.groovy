@@ -17,6 +17,14 @@ def call(params) {
   )
   rtUpload (
     serverId: "liatrio-artifactory",
-    specPath: "${APP_NAME}-${VERSION}.tgz"
+    spec:
+-          """{
+-             "files": [
+-              {
+-                "pattern": "${APP_NAME}-${env.VERSION}.tgz",
+-                "target": "helm/"
+-               }
+-            ]
+-          }"""
   )
 }
