@@ -40,11 +40,11 @@ def call(params) {
       def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
       echo "helm status: ${helm_status_data}"
       def helm_status = readJSON text: "${helm_status_data}"
-      def action = helm_status.Releases?.collect { it.Name }.contains(deploy_name)? "update" : "install"
+      def action = helm_status.Releases?.collect { it.Name }.contains(deploy_name)? "upgrade" : "install"
 
       // Install or update Helm chart
       echo "Performing helm action: ${action}"
-      if ( foundRelease ) {
+      if ( action == "upgrade" ) {
         sh "helm upgrade ${deploy_name} liatrio-repository/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
       } else {
         sh "helm install liatrio-repository/${APP_NAME} --name ${deploy_name} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
