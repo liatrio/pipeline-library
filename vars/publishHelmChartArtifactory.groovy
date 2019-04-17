@@ -21,7 +21,8 @@ def call(params) {
       """{
         "files": [
           {
-            "pattern": "${APP_NAME}-${VERSION}.tgz"
+            "pattern": "${APP_NAME}-${VERSION}.tgz",
+            "target": "./"
           }
         ]
      }"""
