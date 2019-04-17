@@ -3,7 +3,7 @@
 def call(params) {
     withCredentials([usernamePassword(credentialsId: 'artifactory-takumin', variable: 'CREDS', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       sh """
-        #helm init --client-only
+        helm init --client-only
         #helm repo add helm "https://artifactory.liatr.io/artifactory/helm" --username $USERNAME --password $PASSWORD
         helm package --dependency-update --version ${env.VERSION} --app-version ${env.VERSION} ${CHART_PATH}
         """
