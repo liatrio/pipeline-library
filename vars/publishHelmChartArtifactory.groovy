@@ -9,6 +9,7 @@
 def call(params) {
   if (!params) params = [:]
   sh "helm init --client-only"
+  sh "helm dependencies update"
   sh "helm package --dependency-update --version ${VERSION} --app-version ${VERSION} ${CHART_PATH}"
   rtServer (
      id: "liatrio-artifactory",
