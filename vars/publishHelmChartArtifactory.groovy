@@ -5,11 +5,15 @@
  * PARAMETERS
  *   helmRepository
  *   helmRepositoryCredentials
+ *   repos
  **/
 def call(params) {
   if (!params) params = [:]
   sh "helm init --client-only"
-  sh "helm dependencies update"
+  def repos = params.get("repos")
+  repos?.each {
+    sh "helm repo add ${it.name} ${it.url}"
+  }
   sh "helm package --dependency-update --version ${VERSION} --app-version ${VERSION} ${CHART_PATH}"
   rtServer (
      id: "liatrio-artifactory",
