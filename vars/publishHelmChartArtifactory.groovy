@@ -12,7 +12,7 @@ def call(params) {
   sh "helm package --dependency-update --version ${VERSION} --app-version ${VERSION} ${CHART_PATH}"
   rtServer (
      id: "liatrio-artifactory",
-     url: params.get("helmRepository", "https://artifactory.liatr.io/artifactory/helm"),
+     url: params.get("helmRepository", "https://artifactory.liatr.io/artifactory/"),
      credentialsId: params.get("helmRepositoryCredentials", "openshift-token")
   )
   rtUpload (
