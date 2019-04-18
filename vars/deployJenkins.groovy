@@ -1,4 +1,4 @@
-def call(env, teamName, helmChoice) {
+def call(environment, teamName, helmChoice) {
 
 
   withCredentials([file(credentialsId: 'kubeConfig', variable: 'kubeConfig')]) {
@@ -6,7 +6,7 @@ def call(env, teamName, helmChoice) {
     def helmCmd = "helm --kubeconfig=${kubeConfig}"
 
     dir('liatrio-jenkins') {
-      git branch: 'dev', url: 'https://github.com/liatrio/liatrio-jenkins.git'
+      git branch: 'KPITDOS-206_vault', url: 'https://github.com/liatrio/liatrio-jenkins.git'
     }
 
     def fe = fileExists file: "pods.yaml"
@@ -17,7 +17,7 @@ def call(env, teamName, helmChoice) {
       podTemplate = "liatrio-jenkins/liatrio-jenkins/pods"
 
     sh """
-      ${kubeCmd} config use-context ${env}
+      ${kubeCmd} config use-context ${environment}
       ${helmCmd} init --upgrade
       ${helmCmd} init
       ${helmCmd} repo update
@@ -26,7 +26,7 @@ def call(env, teamName, helmChoice) {
       sh """
         ${helmCmd} install liatrio-jenkins/liatrio-jenkins/. \
           --name ${teamName}-jenkins \
-          --set teamName=${teamName} \
+          --set teamName=${teamName},VAULT_URL=${VAULT_URL},VAULT_TOKEN=${VAULT_TOKEN} \
           -f ${podTemplate}.yaml \
           -f credentials.yaml \
           -f jobs.yaml
