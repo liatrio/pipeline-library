@@ -20,7 +20,7 @@
 def call(params) {
   if (!params) params = [:]
   def chartName = params.get("chartName", APP_NAME)
-
+  def branchName = BRANCH_NAME ?: "master"
   withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
     withCredentials([string(credentialsId: params.get("openshiftToken", "openshift-token"), variable: 'OC_TOKEN')]) {
       // Setup OpenShift Kubernetes context and setup Helm
@@ -35,7 +35,7 @@ def call(params) {
       // label: a DNS-1123 label must consist of lower case alphanumeric characters
       // or '-', and must start and end with an alphanumeric character (e.g.
       // 'my-name',  or '123-abc', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?')
-      def deploy_name = "${APP_NAME}-${BRANCH_NAME? : 'master'}".take(32).toLowerCase()
+      def deploy_name = "${APP_NAME}-${branchName}".take(32).toLowerCase()
       echo "Deploy name: ${deploy_name}"
 
       // Check if chart is already installed
