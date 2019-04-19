@@ -20,7 +20,7 @@
 def call(params) {
   if (!params) params = [:]
   def chartName = params.get("chartName", APP_NAME)
-  def branchName = BRANCH_NAME ?: "master"
+  def branchName = env.BRANCH_NAME ?: "master"
   withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
     withCredentials([string(credentialsId: params.get("openshiftToken", "openshift-token"), variable: 'OC_TOKEN')]) {
       // Setup OpenShift Kubernetes context and setup Helm
