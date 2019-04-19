@@ -12,12 +12,14 @@
  *   DOCKER_REGISTRY: Docker registry host name
  *
  * PARAMETERS
- *   openshiftToken (openshift-token): OpenShift token name
- *   helmRepository (https://artifactory.liatr.io/artifactory/helm): Helm repository URL
- *   helmRepositoryCredentials (helm-repository-credentials): Name of Helm credentials
+ *   openshiftToken: DEFAULT = "openshift-token": OpenShift token name
+ *   helmRepository: DEFAULT = "https://artifactory.liatr.io/artifactory/helm": Helm repository URL
+ *   helmRepositoryCredentials: DEFAULT = "helm-repository-credentials": Name of Helm credentials
+ *   chartName: DEFAULT = APP_NAME
  */
 def call(params) {
   if (!params) params = [:]
+  def chartName = params.get("chartName", APP_NAME)
 
   withEnv(["PATH+OC=${tool 'oc3.11'}"]) {
     withCredentials([string(credentialsId: params.get("openshiftToken", "openshift-token"), variable: 'OC_TOKEN')]) {
