@@ -35,7 +35,7 @@ def call(params) {
       // label: a DNS-1123 label must consist of lower case alphanumeric characters
       // or '-', and must start and end with an alphanumeric character (e.g.
       // 'my-name',  or '123-abc', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?')
-      def deploy_name = "${APP_NAME}-${BRANCH_NAME}".take(32).toLowerCase()
+      def deploy_name = "${APP_NAME}-${BRANCH_NAME? : 'master'}".take(32).toLowerCase()
       echo "Deploy name: ${deploy_name}"
 
       // Check if chart is already installed
