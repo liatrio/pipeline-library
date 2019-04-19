@@ -42,7 +42,7 @@ def call(params) {
       def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
       echo "helm status: ${helm_status_data}"
       def helm_status = readJSON text: "${helm_status_data}"
-      def action = helm_status.Releases?.collect { it.Name }.contains(deploy_name)? "upgrade" : "install"
+      def action = helm_status.Releases?.findAll {it.Status == 'DEPLOYED'}.collect { it.Name }.contains(deploy_name)? "upgrade" : "install"
 
       // Install or update Helm chart
       echo "Performing helm action: ${action}"
