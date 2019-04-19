@@ -47,9 +47,9 @@ def call(params) {
       // Install or update Helm chart
       echo "Performing helm action: ${action}"
       if ( action == "upgrade" ) {
-        sh "helm upgrade ${deploy_name} liatrio-repository/${APP_NAME}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+        sh "helm upgrade ${deploy_name} liatrio-repository/${chartName}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
       } else {
-        sh "helm install liatrio-repository/${APP_NAME} --name ${deploy_name} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
+        sh "helm install liatrio-repository/${chartName} --name ${deploy_name} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
       }
     }
   }
