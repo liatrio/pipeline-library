@@ -5,8 +5,8 @@ def call(environment, teamName, helmChoice) {
     def kubeCmd = "kubectl --kubeconfig=${kubeConfig}"
     def helmCmd = "helm --kubeconfig=${kubeConfig}"
 
-    dir('liatrio-jenkins') {
-      git branch: 'KPITDOS-206_vault', url: 'https://github.com/liatrio/liatrio-jenkins.git'
+    dir('charts') {
+      git branch: 'master', url: 'https://github.com/helm/charts.git'
     }
 
     def fe = fileExists file: "pods.yaml"
@@ -24,7 +24,7 @@ def call(environment, teamName, helmChoice) {
     """
     if (helmChoice == "install") {
       sh """
-        ${helmCmd} install liatrio-jenkins/liatrio-jenkins/. \
+        ${helmCmd} install charts/stable/jenkins/. \
           --name ${teamName}-jenkins \
           --set teamName=${teamName},VAULT_URL=${VAULT_URL},VAULT_TOKEN=${VAULT_TOKEN} \
           -f ${podTemplate}.yaml \
