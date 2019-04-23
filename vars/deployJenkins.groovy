@@ -9,28 +9,28 @@ def call(environment, teamName, helmChoice) {
       git branch: 'master', url: 'https://github.com/helm/charts.git'
     }
 
-    def fe = fileExists file: "pods.yaml"
-    def podTemplate = ""
-    if (fe == true)
-      podTemplate = "pods"
-    else
-      podTemplate = "liatrio-jenkins/liatrio-jenkins/pods"
-
     sh """
       ${kubeCmd} config use-context ${environment}
       ${helmCmd} init --upgrade
-      ${helmCmd} init
+      ${helmCmd} init --wait
       ${helmCmd} repo update
     """
     if (helmChoice == "install") {
       sh """
         ${helmCmd} install charts/stable/jenkins/. \
           --name ${teamName}-jenkins \
-          --set teamName=${teamName},VAULT_URL=${VAULT_URL},VAULT_TOKEN=${VAULT_TOKEN} \
-          -f ${podTemplate}.yaml \
-          -f credentials.yaml \
+          -f pods.yaml \
+          -f plugins.yaml \
           -f jobs.yaml
       """
+      //sh """
+      //  ${helmCmd} install charts/stable/jenkins/. \
+      //    --name ${teamName}-jenkins \
+      //    --set teamName=${teamName},VAULT_URL=${VAULT_URL},VAULT_TOKEN=${VAULT_TOKEN} \
+      //    -f pods.yaml \
+      //    -f credentials.yaml \
+      //    -f jobs.yaml
+      //"""
     }
     else if (helmChoice == "delete") {
       sh "${helmCmd} delete --purge ${teamName}-jenkins"
