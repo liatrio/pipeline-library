@@ -5,30 +5,29 @@ def call(environment, teamName, helmChoice) {
     def kubeCmd = "kubectl --kubeconfig=${kubeConfig}"
     def helmCmd = "helm --kubeconfig=${kubeConfig}"
 
-    dir('charts') {
-      git branch: 'master', url: 'https://github.com/helm/charts.git'
-    }
-
     sh """
       ${kubeCmd} config use-context ${environment}
-      ${helmCmd} init --upgrade
-      ${helmCmd} init --wait
+      ${helmCmd} init --force-upgrade
       ${helmCmd} repo update
     """
-    if (helmChoice == "install") {
+    if (helmChoice == "upgrade") {
       sh """
-        ${helmCmd} install charts/stable/jenkins/. \
+        ${helmCmd} upgrade -f master.yaml ${teamName}-jenkins stable/jenkins
+      """
+    }
+    else if (helmChoice == "install") {
+      sh """
+        ${helmCmd} install stable/jenkins \
           --name ${teamName}-jenkins \
-          -f pods.yaml \
-          -f plugins.yaml \
-          -f jobs.yaml
+          -f master.yaml
       """
       //sh """
-      //  ${helmCmd} install charts/stable/jenkins/. \
+      //  ${helmCmd} install stable/jenkins \
       //    --name ${teamName}-jenkins \
       //    --set teamName=${teamName},VAULT_URL=${VAULT_URL},VAULT_TOKEN=${VAULT_TOKEN} \
       //    -f pods.yaml \
       //    -f credentials.yaml \
+      //    -f plugins.yaml \
       //    -f jobs.yaml
       //"""
     }
