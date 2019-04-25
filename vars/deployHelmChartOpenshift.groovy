@@ -39,9 +39,9 @@ def call(params) {
       echo "Deploy name: ${deploy_name}"
 
       // Check if chart is already installed
-      def helm_status_data = (sh returnStdout: true, script: 'helm ls --output=json') ?: '[]'
+      def helm_status_data = sh returnStdout: true, script: 'helm ls --output=json'
       echo "helm status: ${helm_status_data}"
-      def helm_status = readJSON text: "${helm_status_data}"
+      def helm_status = readJSON text: "${helm_status_data ?: '[]'}"
       def action = helm_status.Releases?.findAll {it.Status == 'DEPLOYED'}.collect { it.Name }.contains(deploy_name)? "upgrade" : "install"
 
       // Install or update Helm chart
