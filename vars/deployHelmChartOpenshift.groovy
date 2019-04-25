@@ -49,13 +49,13 @@ def call(params) {
         if ( action == "upgrade" ) {
           sh "helm upgrade ${deploy_name} liatrio-repository/${chartName}  --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
         } else {
-          //try {
+          try {
             sh "helm install liatrio-repository/${chartName} --name ${deploy_name} --version ${VERSION} --namespace ${TILLER_NAMESPACE} --set openshift=true --set image.repository=${DOCKER_REGISTRY}/liatrio/${APP_NAME} --set image.tag=${VERSION}"
-          //} catch (Exception ex) {
+          } catch (Exception ex) {
             // delete helm deployment on failure otherwise it will block future builds
-            //sh "helm delete --purge ${deploy_name}"
-            //throw ex
-          //}
+            sh "helm delete --purge ${deploy_name}"
+            throw ex
+          }
         }
     }
   }
