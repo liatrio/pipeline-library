@@ -1,7 +1,8 @@
 #!/bin/env groovy
 
 def call(params) {
-    docker.withRegistry("https://${DOCKER_REGISTRY}", 'artifactory-takumin') {
-        sh "skaffold build -p ${SKAFFOLD_PROFILE} -f skaffold.yaml"
-    }
+  if (!params) params = [:]
+  docker.withRegistry("https://${DOCKER_REGISTRY}", '${params.get("artifactoryCredentials", "artifactory-credentials")}') {
+    sh "skaffold build -p ${SKAFFOLD_PROFILE} -f skaffold.yaml"
+  }
 }
