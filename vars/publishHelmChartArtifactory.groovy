@@ -12,9 +12,11 @@
 def call(params) {
   if (!params) params = [:]
   def chartPath = params.get("chartPath", "charts/")
-  def chartName = params.get("chartName", APP_NAME)
+  def chartName = params.get("chartName", null)
+  if (!chartName) chartName = APP_NAME
   def helmRepository = params.get("helmRepository", "https://artifactory.liatr.io/artifactory/helm")
-  def version = params.get("version", VERSION)
+  def version = params.get("version", null)
+  if (!version) version = VERSION
   sh "helm init --client-only"
   def repos = params.get("repos")
   repos?.each {
