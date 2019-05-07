@@ -25,23 +25,4 @@ def call(params) {
   withCredentials([usernamePassword(credentialsId: 'jenkins-credential-artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
     sh "curl -X PUT -u ${env.artifactoryUsername}:${env.artifactoryPassword} -T ${chartName}-${VERSION}.tgz 'https://artifactory.liatr.io/artifactory/helm/${chartName}-${VERSION}.tgz'"
   }
-  /*
-  rtServer (
-     id: "liatrio-artifactory",
-     url: params.get("helmRepository", "https://artifactory.liatr.io/artifactory/"),
-     credentialsId: params.get("helmRepositoryCredentials", "openshift-token")
-  )
-  rtUpload (
-    serverId: "liatrio-artifactory",
-    spec:
-      """{
-        "files": [
-          {
-            "pattern": "${chartName}-${VERSION}.tgz",
-            "target": "helm/"
-          }
-        ]
-     }"""
-  )
-  */
 }
