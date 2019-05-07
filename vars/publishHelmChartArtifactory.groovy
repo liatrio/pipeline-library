@@ -22,9 +22,9 @@ def call(params) {
     sh "helm repo add ${it.name} ${it.url}"
   }
   sh "helm package --dependency-update --version ${VERSION} --app-version ${VERSION} ${chartPath}/${chartName}"
-  withCredentials([usernamePassword(credentialsId: 'jenkins-credential-artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
+ /* withCredentials([usernamePassword(credentialsId: 'jenkins-credential-artifactory', passwordVariable: 'artifactoryPassword', usernameVariable: 'artifactoryUsername')]) {
     sh "curl -X PUT -u ${env.artifactoryUsername}:${env.artifactoryPassword} -T ${chartName}-${VERSION}.tgz 'https://artifactory.liatr.io/artifactory/helm/${chartName}-${VERSION}.tgz'"
-  }
+  } */
   /*
   rtServer (
      id: "liatrio-artifactory",
