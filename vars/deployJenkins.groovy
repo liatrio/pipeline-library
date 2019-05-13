@@ -19,17 +19,9 @@ def call(environment, teamName, helmChoice) {
       sh """
         ${helmCmd} install stable/jenkins \
           --name ${teamName}-jenkins \
+          --namespace ${teamName} \
           -f master.yaml
       """
-      //sh """
-      //  ${helmCmd} install stable/jenkins \
-      //    --name ${teamName}-jenkins \
-      //    --set teamName=${teamName},VAULT_URL=${VAULT_URL},VAULT_TOKEN=${VAULT_TOKEN} \
-      //    -f pods.yaml \
-      //    -f credentials.yaml \
-      //    -f plugins.yaml \
-      //    -f jobs.yaml
-      //"""
     }
     else if (helmChoice == "delete") {
       sh "${helmCmd} delete --purge ${teamName}-jenkins"
