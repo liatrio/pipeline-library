@@ -19,11 +19,12 @@ def call(environment, teamName, helmChoice) {
         ${helmCmd} install stable/jenkins \
           --name ${teamName}-jenkins \
           --namespace ${teamName} \
+          --tiller-namespace ${teamName} \
           -f master.yaml
       """
     }
     else if (helmChoice == "delete") {
-      sh "${helmCmd} delete --purge ${teamName}-jenkins"
+      sh "${helmCmd} delete --purge ${teamName}-jenkins --tiller-namespace ${teamName}"
     }
   }
 }
