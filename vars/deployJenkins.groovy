@@ -7,7 +7,6 @@ def call(environment, teamName, helmChoice) {
 
     sh """
       ${kubeCmd} config use-context ${environment}
-      ${helmCmd} init --force-upgrade
       ${helmCmd} repo update
     """
     if (helmChoice == "upgrade") {
